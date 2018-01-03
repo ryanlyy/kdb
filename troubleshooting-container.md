@@ -1,4 +1,4 @@
-Maybe we sometime complain there is no debugging tool available in containe when we debug some issues. Now we should not complain it :)
+Maybe we sometime complain there is no debugging tool available in container when we debug some issues. Now we should not complain it :)
 
 Here is the procedure how to implement it:
 
