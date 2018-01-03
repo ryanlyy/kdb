@@ -6,8 +6,8 @@ Here is the procedure how to implement it:
 Docker is installed
  
 ## 2.	Download troubleshooting container image: ##
-### a.	docker pull ryanlyy/container-troubleshooting:20180103 ###
-### b.	or http://ihgpweb.lucent.com/~ryanl/docker/ (only for Nokia User) ###
+* docker pull ryanlyy/container-troubleshooting:20180103
+* or http://ihgpweb.lucent.com/~ryanl/docker/ (only for Nokia User)
 
 ## 3.	Debugging on Host layer ##
 * docker run --privileged -dt --network=host --ipc=host --pid=host --name tstc ryanlyy/container-troubleshooting:20180103 bash
@@ -27,8 +27,8 @@ https://github.com/ryanlyy/toolsets/blob/master/get_container_rootfs.sh
 Then you can debug your issue within this container.
  
 note: 
-### a.	d108297af3e7 is the ID of container that you want to debug (docker ps) ###
-### b.	in this case, your container has same network, ipc, pid namespace and rootfs of the container that you want to debug ###
+*	d108297af3e7 is the ID of container that you want to debug (docker ps)
+*	in this case, your container has same network, ipc, pid namespace and rootfs of the container that you want to debug
  
 ## 5.	Tools supported so far ##
 Tcpdump, gdb, ip, ethtool, netstat, arping, strace, iptraf-ng, jnettop, iftop, iotop, bmon, traceroute, vmstat, vnstat, openssh, htop, sctp_darn, lsof, iostat, collectl, mpstat, socat, mytop, apachetop, iperf, dig etc.
