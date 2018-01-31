@@ -1,4 +1,4 @@
-This is the procedure to setup multus plugin for Kubernetes
+The procedure to setup multus plugin for Kubernetes
 ==================
 
 # 1. Create CRD networking:
