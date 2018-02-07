@@ -30,7 +30,7 @@ https://github.com/ryanlyy/toolsets/blob/master/get_container_rootfs.sh
 Then you can debug your issue within this container.
  
 note: 
-*	d108297af3e7 is the ID of container that you want to debug (docker ps)
+*	1df11e5e1068 is the ID of container that you want to debug (docker ps)
 *	in this case, your container has same network, ipc, pid namespace and rootfs of the container that you want to debug
 
 ## 5. Deploy Container as Pod ##
