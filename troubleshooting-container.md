@@ -28,8 +28,12 @@ Then you can debug your issue within this container.
 note: 
 *	d108297af3e7 is the ID of container that you want to debug (docker ps)
 *	in this case, your container has same network, ipc, pid namespace and rootfs of the container that you want to debug
- 
-## 5.	Tools supported so far ##
+
+## 7. Deploy Container as Pod ##
+if you want to deploy this container as pod please refer to pod yaml file as following:
+https://github.com/ryanlyy/toolsets/blob/master/troubleshooting-deployment.yaml
+
+## 6.	Tools supported so far ##
 Tcpdump, gdb, ip, ethtool, netstat, arping, strace, iptraf-ng, jnettop, iftop, iotop, bmon, traceroute, vmstat, vnstat, openssh, htop, sctp_darn, lsof, iostat, collectl, mpstat, socat, mytop, apachetop, iperf, dig, qperf, etc.
  
 With those tools, you can check your networking, cpu, disk, memory, process etc. issues.
@@ -43,5 +47,5 @@ htop gdb openssh-server lksctp-tools yajl-devel libcurl-devel
 which socat sysstat vnstat htop atop apachetop mytop iotop dstat 
 mpstat pmap collectl iostat lsof, iperf, bind-utils, qperf
  
-## 6.	You can check the latest version from: ##
+## 7.	You can check the latest version from: ##
 https://hub.docker.com/r/ryanlyy/container-troubleshooting/tags/
