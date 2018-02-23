@@ -48,6 +48,8 @@ for  pod in $UNIQ_POD_LIST; do
                                 cmd=$(echo $ps_line | awk '{ print $1 }')
                                 echo "CMD: $cmd"
                                 if [[ $cmd == *"bash"* || $cmd == *"python"* || $cmd == *"java"* ]]; then
+                                        cmd=$(echo $ps_line | awk '{ print $2 }')
+                                        echo "$pod,$cid,\"$ps_line\",$cmd," >> $OUTPUT_NAME
                                         continue
                                 fi
                                 if [[ $CMD_LIST != *"$cmd"* ]]; then
