@@ -131,6 +131,7 @@ kube-dns:
 Copy /etc/kubernetes/pki from master to slave
 Copy /etc/cni/net.d/* from master to slave
 Copy /opt/cni/bin/multus from master to slave
+Copy /etc/kubernetes/admin.conf from master to slave
 
 just keep 10-multus.conf in /etc/cni/net.d
 
