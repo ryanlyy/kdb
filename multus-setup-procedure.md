@@ -127,7 +127,14 @@ kube-dns:
         k8s-app: kube-dns  
 ```
 
-# 8. EXAMPLE:
+# 8. Slave Join Update
+Copy /etc/kubernetes/pki from master to slave
+Copy /etc/cni/net.d/* from master to slave
+Copy /opt/cni/bin/multus from master to slave
+
+just keep 10-multus.conf in /etc/cni/net.d
+
+# 9. EXAMPLE:
 
 ```
 apiVersion: v1  
