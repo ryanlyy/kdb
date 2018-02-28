@@ -21,7 +21,8 @@ Then you can use a lot of tools to debug your issues.
 Note: in this case, your container has same network, ipc, pid namespace with host 
  
 ## 4.	Debugging in Container layer ##
-https://github.com/ryanlyy/toolsets/blob/master/get_container_rootfs.sh
+
+https://github.com/ryanlyy/toolsets/blob/master/scripts/get_container_rootfs.sh
 
 * Get Container Rootfs: ./get_container_rootfs.sh 1df11e5e1068
 * docker run --privileged -dt -v /var/lib/docker/aufs/mnt/container-rootfs:/1df11e5e1068 --network=container:1df11e5e1068 --ipc=container:1df11e5e1068 --pid=container:1df11e5e1068 --name tstc ryanlyy/container-troubleshooting:20180111 bash
