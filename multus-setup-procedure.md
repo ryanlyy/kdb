@@ -105,10 +105,117 @@ cat <<EOF > /etc/cni/net.d/10-multus.conf
 }  
 EOF  
 ```
+** NOTE: Remove others conf under /etc/cni/net.d
 
-# 6. Install Weave:
+# 6. Install Multus:
+* Download from https://github.com/Intel-Corp/multus-cni/
+* Build it
+
+# 7. Install Flannel:
+* kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml
+* For flannel to work correctly, --pod-network-cidr=10.244.0.0/16 has to be passed to kubeadm init.
+* sysctl -w net.bridge.bridge-nf-call-iptables=1 to pass bridged IPv4 traffic to iptables’ chains
+
+# 8. Install Weave:
 * export kubever=$(kubectl version | base64 | tr -d '\n')
 * kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever";
+
+# 9. Install DANM:
+## Create Danmnet CRD
+```
+cat <<EOF > danmnet-crd.yaml 
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: danmnets.kubernetes.nokia.com
+spec:
+  group: kubernetes.nokia.com
+  names:
+    kind: DanmNet
+    listKind: DanmNetList
+    plural: danmnets
+    singular: danmnet
+  scope: Namespaced
+  version: v1
+EOF
+```
+* kubectl create -f danmnet-crd.yaml
+## Create DanmEp CRD
+```
+cat <<EOF > danmep-crd.yaml 
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: danmeps.kubernetes.nokia.com
+spec:
+  group: kubernetes.nokia.com
+  names:
+    kind: DanmEp
+    listKind: DanmEpList
+    plural: danmeps
+    singular: danmep
+  scope: Namespaced
+  version: v1
+EOF
+```
+* kubectl create -f danmep-crd.yaml
+## Populate Danmnet networking
+```
+cat <<EOF > danmnet.yaml 
+apiVersion: v1
+items:
+- apiVersion: kubernetes.nokia.com/v1
+  kind: DanmNet
+  metadata:
+    clusterName: ""
+    name: ctrl
+    namespace: default
+  spec:
+    NetworkID: ctrl
+    Options:
+      alloc: gAAAA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=
+      cprfx: ctrl
+      device: eth1
+      end: 254
+      network: 169.254.1.0
+      prefix: "24"
+      start: 30
+      vxlan: "102"
+- apiVersion: kubernetes.nokia.com/v1
+  kind: DanmNet
+  metadata:
+    clusterName: ""
+    name: ctrlpub0
+    namespace: default
+  spec:
+    NetworkID: ctrlpub0
+    Options:
+      cprfx: eth5
+      device: eth5
+      vxlan: "200"
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
+EOF
+```
+* kubectl create -f danmnet.yaml
+## Update kubeadmin conf
+```
+#Add /etc/systemd/system/kubelet.service.d/10-kubeadmin.conf
+"Environment="CA_CERT=/etc/kubernetes/pki/ca.crt"
+Environment="CERT=/etc/kubernetes/pki/apiserver-kubelet-client.crt"
+Environment="KEY=/etc/kubernetes/pki/apiserver-kubelet-client.key"
+Environment="API_SERVER=https://10.96.0.1"; "DPLUG_HOST=http://37.12.0.18:15022";" 
+```
+NOTE: 
+* Update dplug host in slave too
+* Make sure manifest KUBE_APISERVER IP corect
+
+## Keep dplug_host reachable: Update /etc/hosts
+```
+dplug failed to start:  dplug has to bind dplug_host so we need to make sure dplug_host reachable and 15022 is not used.
+```
 
 # 7. Update kube-dns manifest:
 
@@ -158,3 +265,5 @@ spec:  # specification of the pod's contents
     stdin: true  
     tty: true  
 ```
+# 10. Reference Procedure
+https://github.com/ryanlyy/toolsets/blob/master/container_runtime_installation_procedure.md
