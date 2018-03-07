@@ -217,7 +217,7 @@ NOTE:
 dplug failed to start:  dplug has to bind dplug_host so we need to make sure dplug_host reachable and 15022 is not used.
 ```
 
-# 7. Update kube-dns manifest:
+# 10. Update kube-dns manifest:
 
 *NOTE: can be ignore if CNI has default network*
 
@@ -234,7 +234,7 @@ kube-dns:
         k8s-app: kube-dns  
 ```
 
-# 8. Slave Join Update
+# 11. Slave Join Update
 * Copy /etc/kubernetes/pki from master to slave
 * Copy /etc/cni/net.d/* from master to slave
 * Copy /opt/cni/bin/multus from master to slave
@@ -242,7 +242,7 @@ kube-dns:
 
 * just keep 10-multus.conf in /etc/cni/net.d
 
-# 9. EXAMPLE:
+# 12. EXAMPLE:
 
 ```
 apiVersion: v1  
@@ -265,5 +265,5 @@ spec:  # specification of the pod's contents
     stdin: true  
     tty: true  
 ```
-# 10. Reference Procedure
+# 13. Reference Procedure
 https://github.com/ryanlyy/toolsets/blob/master/container_runtime_installation_procedure.md
