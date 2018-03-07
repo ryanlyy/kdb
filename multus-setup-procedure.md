@@ -203,10 +203,10 @@ EOF
 ## Update kubeadmin conf
 ```
 #Add /etc/systemd/system/kubelet.service.d/10-kubeadmin.conf
-"Environment="CA_CERT=/etc/kubernetes/pki/ca.crt"
+Environment="CA_CERT=/etc/kubernetes/pki/ca.crt"
 Environment="CERT=/etc/kubernetes/pki/apiserver-kubelet-client.crt"
 Environment="KEY=/etc/kubernetes/pki/apiserver-kubelet-client.key"
-Environment="API_SERVER=https://10.96.0.1"; "DPLUG_HOST=http://37.12.0.18:15022";" 
+Environment="API_SERVER=https://10.96.0.1" "DPLUG_HOST=http://37.12.0.18:15022"
 ```
 NOTE: 
 * Update dplug host in slave too
