@@ -10,6 +10,7 @@ PROJECT_SEARCH_PARAM=""
 PROJECT_PROJECTION="{ "path": .path, "git": .ssh_url_to_repo }"
 PROJECT_SELECTION="select(.namespace.name == \"$NAMESPACE\")"
 
+#HERE is your access token got from setting->access token
 GITLAB_PRIVATE_TOKEN="cMQ7v72TuEQqKLwyzDU9"
 #GITLAB_PRIVATE_TOKEN="X5B7yhon95DYZu7zTz6W"
 FILENAME="repos.json"
