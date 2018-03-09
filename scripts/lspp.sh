@@ -15,7 +15,7 @@ fi
 
 GITLAB_PRIVATE_TOKEN="cMQ7v72TuEQqKLwyzDU9"
 #GITLAB_PRIVATE_TOKEN="X5B7yhon95DYZu7zTz6W"
-FILENAME="$NAMESPACE-repos.json"
+FILENAME="repos.json"
 
 #trap "{ rm -f $FILENAME; }" EXIT
 
