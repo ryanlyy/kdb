@@ -2,7 +2,6 @@
 
 # Documentation
 # https://docs.gitlab.com/ce/api/projects.html#list-projects
-# NAMESPACE can be: tas, ntas, pmod, bb, lawful-interception and nsre
 
 NAMESPACE=$1
 BASE_PATH="https://gitlabe1.ext.net.nokia.com/"
@@ -10,7 +9,6 @@ PROJECT_SEARCH_PARAM=""
 PROJECT_PROJECTION="{ "path": .path, "git": .ssh_url_to_repo }"
 PROJECT_SELECTION="select(.namespace.name == \"$NAMESPACE\")"
 
-#HERE is your access token got from setting->access token
 GITLAB_PRIVATE_TOKEN="cMQ7v72TuEQqKLwyzDU9"
 #GITLAB_PRIVATE_TOKEN="X5B7yhon95DYZu7zTz6W"
 FILENAME="$NAMESPACE-repos.json"
@@ -31,6 +29,7 @@ while true; do
     let PAGE_COUNTER++
 done
 
+echo "All Repos under TAS" > git.repos
 while read repo; do
     THEPATH=$(echo "$repo" | jq -r ".path")
     GIT=$(echo "$repo" | jq -r ".git")
