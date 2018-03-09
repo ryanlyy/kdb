@@ -13,7 +13,7 @@ PROJECT_SELECTION="select(.namespace.name == \"$NAMESPACE\")"
 #HERE is your access token got from setting->access token
 GITLAB_PRIVATE_TOKEN="cMQ7v72TuEQqKLwyzDU9"
 #GITLAB_PRIVATE_TOKEN="X5B7yhon95DYZu7zTz6W"
-FILENAME="repos.json"
+FILENAME="$NAMESPACE-repos.json"
 
 #trap "{ rm -f $FILENAME; }" EXIT
 
