@@ -1,6 +1,6 @@
 This is procedure to install container runtime environment under kebernetes support
 
-# Install Fedora Cloud Qcow2
+# 1 Install Fedora Cloud Qcow2
 * Qcow2 URL
 
 http://mirror.math.princeton.edu/pub/fedora/linux/releases/26/CloudImages/x86_64/images/
@@ -20,7 +20,7 @@ export http_proxy=http://127.0.0.1:6699 **
 export https_proxy=https://127.0.0.1:6699
 export no_proxy="127.0.0.1, localhost, 192.168.122.218"
 ```
-# Install Docker
+# 2 Install Docker
 * echo "proxy=http://127.0.0.1:6699" >> /etc/dnf/dnf.conf
 * sudo dnf -y update
 * reboot
@@ -46,7 +46,7 @@ Environment="HTTP_PROXY=http://127.0.0.1:6699/";
 Environment="HTTPS_PROXY=https://127.0.0.1:6699/";
 EOF
 ```
-# Install Kubernetes
+# 3 Install Kubernetes
 * Configure Kubernetes Repos
 ```
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
@@ -101,7 +101,7 @@ Set cache-size=0 instead of default 1000
     - --server=/ip6.arpa/127.0.0.1#10053
     image: gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.5
 ```
-# Flannel Installation
+# 4 Flannel Installation
 ```
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml
 kubectl taint nodes --all node-role.kubernetes.io/master-
@@ -117,7 +117,7 @@ spec:
     - --iface=eth5
     env:
 ```
-# Install danm
+# 5 Install danm
 * Keep dplug_host reachable: Update /etc/hosts
 ```
 dplug failed to start:  dplug has to bind dplug_host so we need to make sure dplug_host reachable and 15022 is not used.
@@ -133,7 +133,7 @@ Environment="API_SERVER=https://10.96.0.1"; "DPLUG_HOST=http://37.12.0.18:15022"
 Update dplug host in slave too
 ```
 
-# Install helm
+# 6 Install helm
 * Helm Package:
 ```
 wget https://kubernetes-helm.storage.googleapis.com/helm-v2.7.2-linux-amd64.tar.gz
@@ -157,25 +157,25 @@ subjects:
   name: default
   namespace: kube-system
 ```
-# Install NTAS and SIM
+# 7 Install NTAS and SIM
 ```
 NOTE: Update NIC Name
 kubectl create -f /nokia/ntas1212/helm/ntas1107/helm-charts/ntas_danm/manifests/skydns-kubedns-cm.yaml
 ETCD_URL in valule should add "." at last
 DTD needs sctp: modprobe sctp
 ```
-# Install Chart Repes
+# 8 Install Chart Repes
 ```
 mkdir -p /var/chart-repo
 kubectl create -f chart-repo.yaml
 mkdir -p /nokia/chart-repo-backup
 kubectl create -f chart-repo-svc.yaml
 ```
-# Install Robot
+# 9 Install Robot
 ```
 kubectl create -f robot_rbac.yaml
 ```
-# Install JENKINS
+# 10 Install JENKINS
 ```
 	1. kubectl label node ntas-cd-demo-fedora.localdomain nodetype=oam
 	2. update proxy
@@ -184,7 +184,7 @@ kubectl create -f robot_rbac.yaml
 root@jenkins-jenkins-8588fb7894-p2xm6:/robot/bin# curl http://127.0.0.1:8080/job/tas01-auto-setup/lastBuild/api/json?token=tas01
 {"_class":"hudson.model.FreeStyleBuild","actions":[{"_class":"hudson.model.CauseAction","causes":[{"_class":"hudson.model.Cause$UserIdCause","shortDescription":"Started by user admin","userId":"admin","userName":"admin"}]},{}],"artifacts":[],"building":false,"description":null,"displayName":"#9","duration":205054,"estimatedDuration":4988005,"executor":null,"fullDisplayName":"tas01-auto-setup #9","id":"9","keepLog":false,"number":9,"queueId":9,"result":"SUCCESS","timestamp":1513572611407,"url":"http://135.2.157.29:32666/job/tas01-auto-setup/9/","builtOn":"","changeSet":{"_class":"hudson.scm.EmptyChangeLogSet","items":[],"kind":null}}root@jenkins-jenkins-8588fb7894-p2xm6:/robot/bin#
 ```
-# Install heaspter
+# 11 Install heaspter
 ```
 kubectl create -f heapster.yaml
 kubectl create -f heapster-svc.yaml
@@ -203,7 +203,7 @@ kubectl describe hpa -n tas01
 NAME       REFERENCE         TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
 tafe-hpa   Deployment/tafe   <unknown> / 30%   1         2         1          52m
 ```
-# Install ELK
+# 12 Install ELK
 ```
 1258  helm install -n kibana kibana/
 [root@ntas-cd-demo-fedora kibana]# diff values.yaml ../values.ofc.yaml
@@ -262,7 +262,7 @@ curl -X DELETE  http://10.105.231.182:9200/logstash-2017.12.11
 https://kubernetes.io/docs/tasks/debug-application-cluster/logging-elasticsearch-kibana/
 ```
 
-# Slave Join
+# 13 Slave Join
 * Create a new bootstrap token and join
 ```
 Use kubeadm token create to create a new bootstrap token, See kubeadm: Managing Tokens.
@@ -280,7 +280,7 @@ $ kubeadm join --token abcdef.1234567890abcdef --discovery-token-ca-cert-hash sh
 Note: --discovery-token-ca-cert-hash is preferred in Kubernetes 1.8 and above.
 ```
 
-# Docker Registry Installation
+# 14 Docker Registry Installation
 ## unsecure setup 
 * Install Kubernetes Charts
 https://github.com/kubernetes/charts/tree/master/stable/docker-registry
