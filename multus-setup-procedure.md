@@ -116,6 +116,18 @@ EOF
 * For flannel to work correctly, --pod-network-cidr=10.244.0.0/16 has to be passed to kubeadm init.
 * sysctl -w net.bridge.bridge-nf-call-iptables=1 to pass bridged IPv4 traffic to iptables’ chains
 
+```
+for multiple interface on host, please specifiy interface for inter communication
+spec:
+  containers:
+  - command:
+    - /opt/bin/flanneld
+    - --ip-masq
+    - --kube-subnet-mgr
+    - --iface=eth5
+    env:
+```
+
 # 8. Install Weave:
 * export kubever=$(kubectl version | base64 | tr -d '\n')
 * kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever";
