@@ -83,10 +83,39 @@ kubeadm init --pod-network-cidr=10.244.0.0/16
 https://github.com/projectcalico/cni-plugin/releases/download/v1.9.1/
 
 https://github.com/projectcalico/cni-plugin/releases/download/v1.9.1/portmap
+
+* DNS Cache Timeout Issue:
+Set cache-size=0 instead of default 1000
+```
+  - args:
+    - -v=2
+    - -logtostderr
+    - -configDir=/etc/k8s/dns/dnsmasq-nanny
+    - -restartDnsmasq=true
+    - --
+    - -k
+    - --cache-size=0
+    - --log-facility=-
+    - --server=/cluster.local/127.0.0.1#10053
+    - --server=/in-addr.arpa/127.0.0.1#10053
+    - --server=/ip6.arpa/127.0.0.1#10053
+    image: gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.5
+```
 # Flannel Installation
 ```
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml
 kubectl taint nodes --all node-role.kubernetes.io/master-
+```
+```
+for multiple interface on host, please specifiy interface for inter communication
+spec:
+  containers:
+  - command:
+    - /opt/bin/flanneld
+    - --ip-masq
+    - --kube-subnet-mgr
+    - --iface=eth5
+    env:
 ```
 # Install danm
 * Keep dplug_host reachable: Update /etc/hosts
