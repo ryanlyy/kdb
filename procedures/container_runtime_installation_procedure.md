@@ -279,3 +279,33 @@ $ kubeadm join --token abcdef.1234567890abcdef --discovery-token-ca-cert-hash sh
 15:01
 Note: --discovery-token-ca-cert-hash is preferred in Kubernetes 1.8 and above.
 ```
+
+# Docker Registry Installation
+## unsecure setup 
+* Install Kubernetes Charts
+https://github.com/kubernetes/charts/tree/master/stable/docker-registry
+
+* Add docker registry service fqdn to /etc/hosts on all nodes
+```
+10.99.218.88    docker-registry-docker-registry.default.svc.cluster.local
+```
+* Update /etc/systemd/system/multi-user.target.wants/docker.service to add --insecre-registry parameter
+```
+ExecStart=/usr/bin/dockerd --insecure-registry docker-registry-docker-registry.default.svc.cluster.local:5000
+```
+* Restart docker 
+```
+systemctl daemon-reload
+systemctl restart docekr
+```
+NOTE: please remove proxy setup for docker or add no_proxy
+
+* tag your container image and push it to registry
+```
+docker tag xxx:nnn registry_fqdn:5000/xxx:nnn
+docker push registry_fqdn:5000/xxx:nnn
+docker pull registry_fqdn:5000/xxx:nnn
+```
+
+## secure setup
+Will add later
