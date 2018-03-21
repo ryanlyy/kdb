@@ -239,11 +239,50 @@ NOTE:
           value: /etc/kubernetes/ssl/apiserver-kubelet-client.key
 ```
 
-## Keep dplug_host reachable: Update /etc/hosts
+## dplug can't be up
 ```
-dplug failed to start:  dplug has to bind dplug_host so we need to make sure dplug_host reachable and 15022 is not used.
+if dplug can't be up with the following log:
+
+        #+begin_example
+          dplug failed to start:  dplug has to bind dplug_host so we need to make sure dplug_host reachable and 15022 is not used.        
+        #+end_example
+
+        add hostname into "/etc/hosts" of dplug container:
+
+        #+begin_example
+          / # echo $HOSTNAME
+          ntas-cd-demo-fedora.localdomain
+          / # vi /dplug.py
+          / # cat /etc/hosts
+          127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+          ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+          37.12.0.18      ntas-cd-demo-fedora.localdomain
+          / #        
+        #+end_example
 ```
 
+## CNI Plugin Configuration
+```
+* Support danm only
+[root@fedora ~]# cd /etc/cni/net.d/
+          [root@fedora net.d]# cat 00-danm.conf
+          {
+            "type":"danm",
+          }
+* support danm and flannel
+[root@fedora ~]# cd /etc/cni/net.d/
+          [root@fedora net.d]# cat 00-danm.conf
+          {
+            "type":"danm",
+            "master": {
+              "name": "cbr0",
+              "type": "flannel",
+              "delegate": {
+                "isDefaultGateway": true
+              }
+            }
+          }
+```
 # 10. Update kube-dns manifest:
 
 *NOTE: can be ignore if CNI has default network*
