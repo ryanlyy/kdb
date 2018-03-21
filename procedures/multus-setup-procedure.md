@@ -221,9 +221,11 @@ Environment="KEY=/etc/kubernetes/pki/apiserver-kubelet-client.key"
 Environment="API_SERVER=https://10.96.0.1" "DPLUG_HOST=http://37.12.0.18:15022"
 ```
 NOTE: 
-* Update dplug host in slave too
+* Update dplug host in all nodes
 * Update networking pod manifest:
+
 ** Update KUBE_APISERVER
+
 ** Update kubernets CERT Keys
 
 ```
