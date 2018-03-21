@@ -222,7 +222,20 @@ Environment="API_SERVER=https://10.96.0.1" "DPLUG_HOST=http://37.12.0.18:15022"
 ```
 NOTE: 
 * Update dplug host in slave too
-* Make sure manifest KUBE_APISERVER IP corect
+* Update networking pod manifest:
+** Update KUBE_APISERVER
+** Update kubernets CERT Keys
+
+```
+        - name: KUBEAPI_SERVER
+          value: https://135.2.157.29:6443
+        - name: CA_CERT
+          value: /etc/kubernetes/ssl/ca.crt
+        - name: CLIENT_CERT
+          value: /etc/kubernetes/ssl/apiserver-kubelet-client.crt
+        - name: CLIENT_KEY
+          value: /etc/kubernetes/ssl/apiserver-kubelet-client.key
+```
 
 ## Keep dplug_host reachable: Update /etc/hosts
 ```
