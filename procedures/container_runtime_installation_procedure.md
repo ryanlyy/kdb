@@ -203,6 +203,13 @@ kubectl describe hpa -n tas01
 NAME       REFERENCE         TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
 tafe-hpa   Deployment/tafe   <unknown> / 30%   1         2         1          52m
 ```
+NOTE for kubernetes 1.9 to make hpa works
+```
+/etc/kubernetes/manifests/kube-controller-manager.yaml
+you can add new lines and config infos.
+parameter --horizontal-pod-autoscaler-use-rest-clients=false
+```
+https://github.com/kubernetes/kubernetes/issues/57673
 # 12 Install ELK
 ```
 1258  helm install -n kibana kibana/
