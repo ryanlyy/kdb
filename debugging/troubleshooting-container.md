@@ -45,9 +45,7 @@ With those tools, you can check your networking, cpu, disk, memory, process etc.
  
 The following is packages installed:
 
-iproute iputils net-tools jnettop iftop tcpdump ethtool nethogs
-iptraf-ng ngrep mrtg bmon traceroute iptstate  vnstat nmap ngios
-nmon smokeping openssh nmap-ncat strace wget unzip python-pip
-htop gdb openssh-server lksctp-tools yajl-devel libcurl-devel
-which socat sysstat vnstat htop atop apachetop mytop iotop dstat 
-mpstat pmap collectl iostat lsof, iperf, bind-utils, qperf
+* Networking:
+iproute2 iputils net-tools jnettop iftop tcpdump ethtool nethogs iptraf-ng bmon traceroute iptstate  vnstat nmap nmon smokeping nmap-ncat wget lksctp-tools socat vnstat iperf bind-utils qperf
+* Other:
+ngrep mrtg ngios openssh strace unzip python-pip htop gdb openssh-server yajl-devel libcurl-devel which  sysstat htop atop apachetop mytop iotop dstat mpstat pmap collectl iostat lsof
