@@ -105,8 +105,11 @@ cat <<EOF > /etc/cni/net.d/10-multus.conf
 }  
 EOF  
 ```
-** NOTE: Remove others conf under /etc/cni/net.d
-
+* Make sure there is no other config from other plugins
+```
+For Flannel: Update flannel manifest to remove init container which is used to copy 10-flannel.conf to /etc/cni/net.d
+For Weave: it is weave container to generate 10-weave.conf when it is started. So need a new container for multus to monitor this /etc/cni/net.d as mounted volume when there is other conf, remove it and restart kubelet service.
+```
 # 6. Install Multus:
 * Download from https://github.com/Intel-Corp/multus-cni/
 * Build it
