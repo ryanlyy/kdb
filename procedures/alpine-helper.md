@@ -14,6 +14,7 @@ These proactive security features prevent exploitation of entire classes of zero
 * Installing/Upgrading/Deleting --- apk
 * Restoring a system  --- lbu
 ## 2.1. Packages and Repositories
+
 ```
 Contents of /etc/apk/repositories
 
@@ -23,6 +24,7 @@ http://nl.alpinelinux.org/alpine/v3.7/community
 @edgecommunity http://nl.alpinelinux.org/alpine/edge/community
 @testing http://nl.alpinelinux.org/alpine/edge/testing
 ```
+https://git.alpinelinux.org/cgit/aports/tree/main/alpine-mirrors/mirrors.yaml
 
 ## 2.2. Apk actions
 * apk update
@@ -30,6 +32,8 @@ http://nl.alpinelinux.org/alpine/v3.7/community
 * apk add/del xxx
 * apk search 
 * apk info [-a] [xxx]
+
+https://pkgs.alpinelinux.org/packages
 
 ## 2.3. Example using apk to build networking container image based on alpine
 ```
