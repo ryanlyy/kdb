@@ -1,6 +1,6 @@
 Alpine Linux helper 
 ---
-# 1. Alpine Linux: Small Simple Secure 
+1. Alpine Linux: Small Simple Secure 
 * Alpine Linux is a security-oriented, lightweight Linux distribution based on **musl libc and busybox**
 * Alpine Linux is an __independent__, __non-commercial__, __general purpose__ Linux distribution designed for power users who appreciate security, simplicity and resource efficiency
 * The latest version: **3.7.0** (cat /etc/alpine-release)
@@ -14,10 +14,10 @@ These proactive security features prevent exploitation of entire classes of zero
 ```
 https://wiki.alpinelinux.org/wiki/Tutorials_and_Howtos
 
-# 2. Alpine Linux Package management: 
+1. Alpine Linux Package management: 
 * Installing/Upgrading/Deleting --- apk
 * Restoring a system  --- lbu
-## 2.1. Packages and Repositories
+   1. Packages and Repositories
 
 ```
 Contents of /etc/apk/repositories
