@@ -40,6 +40,15 @@ b. **CMake**: A widely used meta-build system that can generate Ninja files on L
 build>cmake ../ -G Ninja
 Output: build.ninja
 ```
+```
+ graph
+	
 
+output a file in the syntax used by graphviz, a automatic graph layout tool. Use it like:
+
+ninja -t graph mytarget | dot -Tpng -ograph.png
+
+In the Ninja source tree, ninja graph.png generates an image for Ninja itself. If no target is given generate a graph for all root targets.
+```
 # CMake Example
 https://github.com/ttroy50/cmake-examples.git
