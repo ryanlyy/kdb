@@ -88,7 +88,7 @@ EOF
 * systemctl restart kubelet
 
 ```
-cat <<EOF > /etc/cni/net.d/10-multus.conf  
+cat <<EOF > /etc/cni/net.d/00-multus.conf  
 {  
   "name": "multus-cni-network",  
   "type": "multus",  
