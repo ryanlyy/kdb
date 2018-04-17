@@ -105,6 +105,9 @@ cat <<EOF > /etc/cni/net.d/00-multus.conf
 }  
 EOF  
 ```
+NOTE: 
+Here "delegates" in 00-multus.conf means default CNI plugin if there is no networking in manifest configured.
+
 * Make sure there is no other config from other plugins
 ```
 For Flannel: Update flannel manifest to remove init container which is used to copy 10-flannel.conf to /etc/cni/net.d
