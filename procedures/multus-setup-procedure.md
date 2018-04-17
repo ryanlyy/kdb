@@ -106,7 +106,7 @@ cat <<EOF > /etc/cni/net.d/00-multus.conf
 EOF  
 ```
 NOTE: 
-Here "delegates" in 00-multus.conf means default CNI plugin if there is no networking in manifest configured.
+In this above config, flannel acts as the default network in the absence of network field in the pod metadata annotation.
 
 * Make sure there is no other config from other plugins
 ```
