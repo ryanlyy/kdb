@@ -1,0 +1,58 @@
+1.	(master node)Create a new kubeadm token:
+[root@cd-demo-1 ~]# kubeadm token create
+el9acd.1on0n6k7laiq6r7h
+[root@cd-demo-1 ~]#
+
+2.	(master node)get root ca cert fingerprint:
+[root@cd-demo-1 ~]# openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
+97ed27a481b2d003892778b55887335d7bdc8dfdee20a77dd1fe0e2fd7f5d001
+[root@cd-demo-1 ~]#
+
+3.	(slave node)Add record to “/etc/hosts”:
+[root@cd-demo-1-slave ~]# cat /etc/hosts
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+37.14.1.9   cd-demo-1-slave.localdomain
+[root@cd-demo-1-slave ~]#
+
+4.	(slave node)Install kubelet and docker:
+yum install docker-ce
+systemctl enable docker && systemctl start docker
+setenforce 0
+yum install -y kubelet kubeadm kubectl
+
+5.	(slave node)Add proxy for docker:
+cd /etc/systemd/system/docker.service.d
+cat http_proxy.conf
+[Service]
+Environment="HTTP_PROXY=http://127.0.0.1:8000/"
+Environment="HTTPS_PROXY=https://127.0.0.1:8000/"
+systemctl daemon-reload
+service docker restart
+
+6.	(slave node)Load networking image on slave node(If you have docker-registry, this step can be skipped):
+docker load -i networking.171106.tgz
+
+7.	copy cni staffs to slave node:
+delete old cni configuration under "/etc/cni/net.d/"
+scp -r 135.2.157.10:/etc/cni/ /etc/
+scp -r 135.2.157.10:/opt/cni/ /opt/
+
+8.	Copy “/etc/kubernetes/admin.conf” and “/etc/kubernetes/pki/” from master to slave:
+scp -r 135.2.157.10:/etc/kubernetes/admin.conf /etc/kubernetes/admin.conf
+scp -r 135.2.157.10:/etc/kubernetes/pki/ /etc/kubernetes/
+
+9.	Change “/etc/systemd/system/kubelet.service.d/10-kubeadm.conf” to add following environment:
+Environment="CA_CERT=/etc/kubernetes/pki/ca.crt" "CERT=/etc/kubernetes/pki/apiserver-kubelet-client.crt" "KEY=/etc/kubernetes/pki/apiserver-kubelet-client.key"
+Environment="API_SERVER=https://10.96.0.1" "DPLUG_HOST=http://37.14.1.9:15022"
+Make sure to update DPLUG_HOST here for all the nodes to point to its LOCAL dplug ip.
+
+10.	(slave node)login to the new worker node, and join to cluster:
+kubeadm join --token el9acd.1on0n6k7laiq6r7h --discovery-token-ca-cert-hash sha256:97ed27a481b2d003892778b55887335d7bdc8dfdee20a77dd1fe0e2fd7f5d001 135.2.157.10:6443
+
+11.	Slave node can be seen:
+[root@cd-demo-1 tonyaw]# kubectl get nodes
+NAME                          STATUS    ROLES     AGE       VERSION
+cd-demo-1-slave.localdomain   Ready     <none>    12m       v1.10.3
+cd-demo-1.localdomain         Ready     master    4d        v1.10.2
+[root@cd-demo-1 tonyaw]#
