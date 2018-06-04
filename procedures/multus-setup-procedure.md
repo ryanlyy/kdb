@@ -341,7 +341,7 @@ spec:  # specification of the pod's contents
 https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
 
 ```
-cat <<EOF > danmnet-crd.yaml
+cat <<EOF > calico-crd.yaml
 apiVersion: "kubernetes.com/v1"
 kind: Network
 metadata:
