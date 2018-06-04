@@ -337,5 +337,34 @@ spec:  # specification of the pod's contents
     stdin: true  
     tty: true  
 ```
-# 13. Reference Procedure
+# 13 Setup Calico Plugin with etcd datastore
+https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
+
+```
+cat <<EOF > danmnet-crd.yaml
+apiVersion: "kubernetes.com/v1"
+kind: Network
+metadata:
+  name: calico-networkobj
+plugin: calico
+args: '[
+         {
+            "name": "calico-network",
+            "etcd_endpoints": "http://127.0.0.1:2379",
+            "etcd_key_file": "",
+            "etcd_cert_file": "",
+            "etcd_ca_cert_file": "",
+            "log_level": "debug",
+            "ipam": {
+               "type": "calico-ipam"
+            },
+            "kubernetes": {
+              "kubeconfig": "/etc/cni/net.d/calico-kubeconfig"
+            }
+         }
+]'
+EOF
+```
+
+# 14. Reference Procedure
 https://github.com/ryanlyy/toolsets/blob/master/container_runtime_installation_procedure.md
