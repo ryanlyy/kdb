@@ -365,6 +365,8 @@ args: '[
 ]'
 EOF
 ```
+NOTE: 
+* Calico and Flannel can't coexist when Calico uses Kubernetes Datastore because both Calico and Flannel need --cluster-cidr=192.168.0.0/16 and --allocate-node-cidrs=true configured in kubernetes-control-manager
 
 # 14. Reference Procedure
 https://github.com/ryanlyy/toolsets/blob/master/container_runtime_installation_procedure.md
