@@ -368,5 +368,33 @@ EOF
 NOTE: 
 * Calico and Flannel can't coexist when Calico uses Kubernetes Datastore because both Calico and Flannel need --cluster-cidr=192.168.0.0/16 and --allocate-node-cidrs=true configured in kubernetes-control-manager
 
+* ETCD datastore with TLS support:
+```
+  # Configure this with the location of your etcd cluster.
+  **etcd_endpoints: "https://127.0.0.1:2379"**
+  
+    # If you're using TLS enabled etcd uncomment the following.
+  # You must also populate the Secret below with these files.
+  etcd_ca: "/calico-secrets/etcd-ca"
+  etcd_cert: "/calico-secrets/etcd-cert"
+  etcd_key: "/calico-secrets/etcd-key"
+  
+  
+    # This self-hosted install expects three files with the following names.  The values
+  # should be base64 encoded strings of the entire contents of each file.
+  etcd-key: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFb2dJQkFBS0NBUUVBc2JWT1BUOU9VMktTU1RTdGRmUTh0MDJPNjU2V1VjdE5NbEU3OXRTZjZ3Y3FVR1lPCndrODlSYzc2T1hGdDYxK1BlNEpjOUFjY2pRa1JYNmdmankwQVlyM0R5bG1tczRDSWM0SFlsZjFKc0FYdWZsV0UKOUpJTTlYbXdnQUozMkFUTFI4UnVGWHhGQjVJQktnNFJDSDNXYk55TEIzaWJhbVMybWlCeFREbVJzcEF2WXZiWgo4ZmxGbkFXWUtLMkpZS241bzhTdzBKMUdRa3pqdFBZV3hnNnhQbFJOa2MwZ0lBMkpEc0NRNUExQXdsKzdqSFhHCnpXbWlXTENZZE5JWVUzOGxSR1pNUnF1RFhrSGpHTVlzTTdwZHJSclNDWm5Gb0NQaEhaeW9PeE9OYThvQlY4MXoKU3Z3VVZkSVlOT2Q4N29SMDd1TVJpOWx4dE4wQ2VqWEFnWmZVTlFJREFRQUJBb0lCQURZeTZjM2NSUE5CbVFRaQp3TlM4ek5mTEc4L1k2bGUvL2FkZkJ6N2MwbmxJRWl1N05MMG1sYlY0enZBK0hCd3haUDF5WVE4OExBVUh3dmk5CnVnSmM0MFU2UTBDdjN4dllFOFhHMEZ2T2lHN2JJRVgvcHpGQWFodGtKZVNrM0JCU1JmMTVkMm11SVErU0JERGoKWVdhSm1xQlJFMFlRRHJhQVNRRHc3QjBuWWJ4bm91R1hCa1FvaTBOdnVFL1FWZlU5ckJxVzNZaFN5bFRBV2lZSQp4Y0VZUklKV04xd20rbVM0a3NYcEZQeFJFODF1cHJReU1xeFNVbVlTUkpNNG14MmhVNklsVHo5cVB1UTM2YysrCkp3Qk5NSDhPbnZiU1ZhaXFTL09rbU00SDNSSmlucXhxY1pUZTd0UWxLL2FNQUNDVDdLUEF3aHRVczZ4cGhseVgKTXpWanp3RUNnWUVBeHdjcXBMblZDT05QS1krVUg0Njh3K0JROFZpdWRSQ2M1SkV5SkRtYWxuWW5pSy9PdmszLwpDZXZMMHBUOVJyMEYrU0RWdFFGZnBCajlBZ0QzZXdyV0V5dWRvdzRrQzhpZlhkVDBUdTRUSlM3Vnpaa3Z6a1B3CnczY3h4Q1I5bFFaVzNjSnBsdkF5cFpIWUFMM09qVW1jWkZFRWoydUljT0ZESHhQU3FRUDhpVEVDZ1lFQTVKUFIKMkZrelc1QU1ab0p5YmdBeFZHVm4zRjk5M3VEcDJhalRVY00rbVdRV0duV0NIVzV0RXpaNkQxYUVBMEx6SkgybApuZTZiWndLNmVFOVBzcXR0ZVNEcTNZU2prREhuWm1DUGlXQTlVUWVVUy9CU0NRd3RoaFd2QmFsMHJvdERFaTF0CnVRT2pBM0x1RFJHcE9BYWFWUkNveTIrd0pzWTI3UnRRWlNZZCtrVUNnWUJhQVFhcXlaTHFXd2tnalZwNXp1M1UKVXF1b0NPZVQ3dmhVY01qUkV1K3luU29ScVJlQWZmc1l2SFpHKzdOeCt1Y3BtMHlwZHo2T0VmTFFwaWxFamtqegpFR1ZRS0lQcWhFWjFnMmtjREpQQjIrVTUvYzFkcE9ITE15cmhQWE5CSWtYRU1UZlkxelRBSlMwZVlMZDRzMUl6CkYyUk5pMTUvVlk4cURhZlZZUVVoOFFLQmdHQ2c0TkFkL1drU3Z6dENvQTlDZzVnUytsSWVDRDhGUTdhZytSeVMKZGs4d0VXd0VDd3BZR1VKTEFGU2xsVTh2cVV2ZTFmbXEyZ1UxRVJFMUxoTHhCMmx5Y2ZkTlVEdnY3TXZKdkVRdAo3QjNxSDFYdTlTOGY5OHE4TmU0bDBjN0x6b0hMdEp2SEhzMmhjMk1RK1VGWEFUMCt1cXl0dllEV3dIZUIyWDI1CkhHa2xBb0dBUGJDQWVVWVFQZUpLS0t4dGZ6Z3BCMU5Za1E3RnpaN1VFK2lJNk5VdFNYZ0FmS0dXaDBCV0puY2YKRDdpZmpBcnJFeHNTbHNTUjQvMXk0VzBSVTVTS1ZPc1hJbHd2elNJMzJHTUJvK3prSG1pYzZRYm5jNmhERmZ1TwpWcUN2TFZuSUJhQ0ZQTjlSR3lWWVVYVUhDa1hIQWYrQ3VkWWFIUjFMdkdUT0dPUUZSME09Ci0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tCg==
+  etcd-cert: ....
+  etcd-ca: ....
+  
+  
+  ps -ef | grep apiserver
+root      4264  4247  2 08:45 ?        00:03:55 kube-apiserver --insecure-port=0 --allow-privileged=true --advertise-address=135.2.157.37 --service-cluster-ip-range=10.96.0.0/12 --tls-cert-file=/etc/kubernetes/pki/apiserver.crt --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --requestheader-allowed-names=front-proxy-client --requestheader-group-headers=X-Remote-Group --requestheader-extra-headers-prefix=X-Remote-Extra- --client-ca-file=/etc/kubernetes/pki/ca.crt --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key --proxy-client-key-file=/etc/kubernetes/pki/front-proxy-client.key --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota --enable-bootstrap-token-auth=true --requestheader-username-headers=X-Remote-User --service-account-key-file=/etc/kubernetes/pki/sa.pub --tls-private-key-file=/etc/kubernetes/pki/apiserver.key --secure-port=6443 --proxy-client-cert-file=/etc/kubernetes/pki/front-proxy-client.crt --authorization-mode=Node,RBAC --etcd-servers=https://127.0.0.1:2379 --etcd-cafile=/etc/kubernetes/pki/etcd/ca.crt --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key
+
+
+cat /etc/kubernetes/pki/etcd/ca.crt | base64 -w 0
+cat /etc/kubernetes/pki/apiserver-etcd-client.crt | base64 -w 0
+cat /etc/kubernetes/pki/apiserver-etcd-client.key | base64 -w 0
+```
+
 # 14. Reference Procedure
 https://github.com/ryanlyy/toolsets/blob/master/container_runtime_installation_procedure.md
