@@ -395,6 +395,21 @@ cat /etc/kubernetes/pki/etcd/ca.crt | base64 -w 0
 cat /etc/kubernetes/pki/apiserver-etcd-client.crt | base64 -w 0
 cat /etc/kubernetes/pki/apiserver-etcd-client.key | base64 -w 0
 ```
+* Calico Node Host IP Selection
+```
+P_AUTODETECTION_METHOD 	The method to use to autodetect the IPv4 address for this host. This is only used when the IPv4 address is being autodetected. See IP Autodetection methods for details of the valid methods. [Default: first-found]
+interface=INTERFACE-REGEX
+
+The interface method uses the supplied interface regular expression (golang syntax) to enumerate matching interfaces and to return the first IP address on the first matching interface. The order that both the interfaces and the IP addresses are listed is system dependent.
+
+e.g.
+
+# Valid IP address on interface eth0, eth1, eth2 etc.
+IP_AUTODETECTION_METHOD=interface=eth.*
+IP6_AUTODETECTION_METHOD=interface=eth.*
+
+
+```
 
 # 14. Reference Procedure
 https://github.com/ryanlyy/toolsets/blob/master/container_runtime_installation_procedure.md
