@@ -80,6 +80,8 @@ kubeadm init --pod-network-cidr  192.168.0.0/16 --apiserver-advertise-address 10
 kubeadm init --pod-network-cidr=10.244.0.0/16
       --token string                            The token to use for establishing bidirectional trust between nodes and masters.
       --token-ttl duration                      The duration before the bootstrap token is automatically deleted. 0 means 'never expires'. (default 24
+ 
+if kubeadm init block for long time, consider unset http_proxy and https_proxy
 ```
 * CNI Plugin Location
 
