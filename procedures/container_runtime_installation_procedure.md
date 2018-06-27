@@ -74,6 +74,9 @@ sysctl --system
 ```
 * Kubernetes Installation
 ```
+apt-get install -y kubelet=1.10.3-00 kubeadm=1.10.3-00 kubectl=1.10.3-00
+kubeadm init --pod-network-cidr  192.168.0.0/16 --apiserver-advertise-address 10.0.16.226 --token-ttl 0 --kubernetes-version v1.10.3
+
 kubeadm init --pod-network-cidr=10.244.0.0/16
       --token string                            The token to use for establishing bidirectional trust between nodes and masters.
       --token-ttl duration                      The duration before the bootstrap token is automatically deleted. 0 means 'never expires'. (default 24
