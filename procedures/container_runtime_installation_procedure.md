@@ -11,6 +11,15 @@ http://mirror.math.princeton.edu/pub/fedora/linux/releases/26/CloudImages/x86_64
 password: fedora
 chpasswd: { expire: False }
 ```
+```
+Allow root access:
+#!/bin/bash
+# setup root access - default login: oom/oom - comment out to restrict access too ssh key only
+sed -i 's/PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+sed -i 's/PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+service sshd restart
+echo -e "oom\noom" | passwd root
+```
 * sudo passwd root
 
 w/: newsys
