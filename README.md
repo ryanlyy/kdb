@@ -1,1 +1,2 @@
-This is knowledage Database Sharing
+Knowledge Database Sharing
+-----------------------------------
