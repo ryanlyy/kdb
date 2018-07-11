@@ -330,5 +330,22 @@ docker push registry_fqdn:5000/xxx:nnn
 docker pull registry_fqdn:5000/xxx:nnn
 ```
 
+# 15 Upgrade Kubernetes
+* Upgrade kubeadm
+```
+yum install kubeadm-1.9.0
+```
+* Upgrde control plan
+```
+kubeadm upgrade plan
+kubeadm upgrade apply v1.9.0
+```
+* Upgrade kubelet
+kubectl drain ntas-cd-demo-fedora.localdomain  --ignore-daemonsets
+yum update kubelet-1.9.0
+yum update kubectl-1.9.0
+systemctl status kubelet
+kubectl uncordon ntas-cd-demo-fedora.localdomain
+
 ## secure setup
 Will add later
