@@ -83,6 +83,8 @@ sysctl --system
 ```
 * Kubernetes Installation
 ```
+yum install kubeadm-1.9.0
+
 apt-get install -y kubelet=1.10.3-00 kubeadm=1.10.3-00 kubectl=1.10.3-00
 kubeadm init --pod-network-cidr  192.168.0.0/16 --apiserver-advertise-address 10.0.16.226 --token-ttl 0 --kubernetes-version v1.10.3
 
