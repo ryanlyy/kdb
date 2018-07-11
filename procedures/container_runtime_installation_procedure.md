@@ -341,11 +341,15 @@ kubeadm upgrade plan
 kubeadm upgrade apply v1.9.0
 ```
 * Upgrade kubelet
+```
 kubectl drain ntas-cd-demo-fedora.localdomain  --ignore-daemonsets
 yum update kubelet-1.9.0
 yum update kubectl-1.9.0
+systemctl restart kubelet
 systemctl status kubelet
+if fail check journalctl -f -u kubelet
+check cgroup driver [cgroupfs | systemd]
 kubectl uncordon ntas-cd-demo-fedora.localdomain
-
+```
 ## secure setup
 Will add later
