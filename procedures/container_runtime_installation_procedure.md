@@ -203,6 +203,13 @@ root@jenkins-jenkins-8588fb7894-p2xm6:/robot/bin# curl http://127.0.0.1:8080/job
 # 11 Install heaspter
 ```
 kubectl create -f heapster.yaml
+Update the following in heapster.yaml to speedup the speed of fetching cpu:
+  - command:
+    - /heapster
+    - --sink=log
+    - --source=kubernetes:https://kubernetes.default
+    - --metric-resolution=30s
+
 kubectl create -f heapster-svc.yaml
 helm install
 
