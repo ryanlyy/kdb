@@ -358,5 +358,32 @@ if fail check journalctl -f -u kubelet
 check cgroup driver [cgroupfs | systemd]
 kubectl uncordon ntas-cd-demo-fedora.localdomain
 ```
+# 16 Rolling Update
+```
+minReadySeconds: 5
+strategy:
+  # indicate which strategy we want for rolling update
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 1
+```
+```
+    minReadySeconds:
+        the bootup time of your application, Kubernetes waits specific time til the next pod creation.
+        Kubernetes assume that your application is available once the pod created by default.
+        If you leave this field empty, the service may be unavailable after the update process cause all the application pods are not ready yet
+    maxSurge:
+        amount of pods more than the desired number of Pods
+        this fields can be an absolute number or the percentage
+        ex. maxSurge: 1 means that there will be at most 4 pods during the update process if replicas is 3
+    maxUnavailable:
+        amount of pods that can be unavailable during the update process
+        this fields can be a absolute number or the percentage
+        this fields cannot be 0 if maxSurge is set to 0
+        ex. maxUnavailable: 1 means that there will be at most 1 pod unavailable during the update process
+```
+https://tachingchen.com/blog/kubernetes-rolling-update-with-deployment/
+
 ## secure setup
 Will add later
