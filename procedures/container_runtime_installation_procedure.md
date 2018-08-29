@@ -94,6 +94,14 @@ kubeadm init --pod-network-cidr=10.244.0.0/16
  
 if kubeadm init block for long time, consider unset http_proxy and https_proxy
 ```
+if support containerd only w/o dockerd:
+```
+kubeadm init --pod-network-cidr=10.244.0.0/16 --cri-socket /var/run/containerd/containerd.sock --ignore-preflight-errors=all
+kubeadm join 192.168.122.59:6443 --token vvjdz5.es55u8uf3vute14f --discovery-token-ca-cert-hash sha256:f18f411d0575e7afb0bf5a8942981bce9891e128ef0ac4e8e6db577452975739 --cri-socket /var/run/containerd/containerd.sock --ignore-preflight-errors=all
+```
+
+**NOTE: kubernetes can support dockerd and containerd, --cri-socket is key difference. if it specifies to /var/run/containerd.sock then kubernetes will use containerd as runtime engine. if it is /var/run/docker.sock then it will use dockerd as runtime engine**
+
 * CNI Plugin Location
 
 https://github.com/projectcalico/cni-plugin/releases/download/v1.9.1/
