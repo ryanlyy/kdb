@@ -55,6 +55,30 @@ Environment="HTTP_PROXY=http://127.0.0.1:6699/";
 Environment="HTTPS_PROXY=https://127.0.0.1:6699/";
 EOF
 ```
+**if only install containerd**
+```
+git clone https://github.com/containerd/cri
+cd ./cri/contrib/ansible
+ansible-playbook -i hosts cri-containerd.yaml
+```
+**Containerd proxy configuration:**
+```
+[Service]
+ExecStartPre=/sbin/modprobe overlay
+ExecStart=/usr/local/bin/containerd
+Restart=always
+RestartSec=5
+Delegate=yes
+KillMode=process
+OOMScoreAdjust=-999
+LimitNOFILE=1048576
+# Having non-zero Limit*s causes performance problems due to accounting overhead
+# in the kernel. We recommend using cgroups to do container-local accounting.
+LimitNPROC=infinity
+LimitCORE=infinity
+Environment="HTTP_PROXY=http://135.245.48.34:8000"
+```
+
 # 3 Install Kubernetes
 * Configure Kubernetes Repos
 ```
@@ -101,6 +125,12 @@ kubeadm join 192.168.122.59:6443 --token vvjdz5.es55u8uf3vute14f --discovery-tok
 ```
 
 **NOTE: kubernetes can support dockerd and containerd, --cri-socket is key difference. if it specifies to /var/run/containerd.sock then kubernetes will use containerd as runtime engine. if it is /var/run/docker.sock then it will use dockerd as runtime engine**
+
+**kubernetes does not support swap, disable swap is needed**
+```
+comments swap from /etc/fstab
+swapoff -a
+```
 
 * CNI Plugin Location
 
