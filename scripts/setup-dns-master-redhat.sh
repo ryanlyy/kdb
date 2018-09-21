@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#nodeX_ip means all slave ip which need to access master node
 usage () {
   echo "Usage:"
   echo "   ./$(basename $0) node1_ip node2_ip ... nodeN_ip"
