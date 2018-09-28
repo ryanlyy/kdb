@@ -330,6 +330,14 @@ curl -X DELETE  http://10.105.231.182:9200/logstash-2017.12.11
 https://kubernetes.io/docs/tasks/debug-application-cluster/logging-elasticsearch-kibana/
 ```
 
+**ElasticSearch Tips
+Q1: Content-Type header [application/x-www-form-urlencoded] is not supported
+```
+To fix this, add curl option -H 'Content-Type: application/json'
+```
+Q2: 
+
+
 # 13 Slave Join
 * Create a new bootstrap token and join
 ```
