@@ -1,6 +1,7 @@
 MicroService and CloudNative Homepage
 -----------------------
-# Application Robustness – Make a stable system in unstable environment
+# Application Robustness 
+  – Make a stable system in unstable environment
 * Hardware Performance Independence
   * disk independence: disk access w/ buffer supported and standalone thread
   * network independence: network access w/ buffer supported and standalone thread
