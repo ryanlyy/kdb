@@ -7,3 +7,13 @@ MicroService and CloudNative Homepage
 * Packet Fault Tolerance
   * Check it is valid format you can support
 
+# Principles 
+* Logging
+  * Flexibility - STDOUT
+  * docker with fluentd plugin
+  * filebeat to Elasticsearch
+* API
+  * RESTful
+  * GRPC
+* Dataless
+  * 
