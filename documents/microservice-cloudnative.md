@@ -18,6 +18,7 @@ http://peter.bourgon.org/blog/2017/02/21/metrics-tracing-and-logging.html
   * RESTful
   * GRPC
 * Dataless
-  * 
-* Common Transport Middleware
+* Metrics
+* Tracing
+  * Common Transport Middleware
   * (Hook) Tracing System Embedded
