@@ -9,6 +9,7 @@ MicroService and CloudNative Homepage
   * Check it is valid format you can support
 
 # Principles 
+http://peter.bourgon.org/blog/2017/02/21/metrics-tracing-and-logging.html
 * Logging
   * Flexibility - STDOUT
   * docker with fluentd plugin
@@ -18,3 +19,5 @@ MicroService and CloudNative Homepage
   * GRPC
 * Dataless
   * 
+* Common Transport Middleware
+  * (Hook) Tracing System Embedded
