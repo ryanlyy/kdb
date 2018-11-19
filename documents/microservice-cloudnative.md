@@ -15,6 +15,7 @@ http://peter.bourgon.org/blog/2017/02/21/metrics-tracing-and-logging.html
   * docker with fluentd plugin
   * filebeat to Elasticsearch
 * Metrics
+  * Prometheus
 * Tracing
   * Common Transport Middleware
   * (Hook) Tracing System Embedded
