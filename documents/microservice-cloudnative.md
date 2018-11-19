@@ -14,11 +14,11 @@ http://peter.bourgon.org/blog/2017/02/21/metrics-tracing-and-logging.html
   * Flexibility - STDOUT
   * docker with fluentd plugin
   * filebeat to Elasticsearch
-* API
-  * RESTful
-  * GRPC
-* Dataless
 * Metrics
 * Tracing
   * Common Transport Middleware
   * (Hook) Tracing System Embedded
+* API
+  * RESTful
+  * GRPC
+* Dataless
