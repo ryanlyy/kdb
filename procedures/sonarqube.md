@@ -121,4 +121,70 @@ Populate the file with:
 sudo systemctl start httpd
 sudo systemctl enable httpd
 
+# Don't run sonar as root
+```
+groupadd sonar
+useradd -c "Sonar System User" -d /opt/sonarqube -g sonar -s /bin/bash sonar
+chown -R sonar:sonar /opt/sonarqube
 
+edit /opt/sonarqube/bin/sonar.sh – find RUN_AS_USER entry, uncomment it and assign your SonarQube system username:
+
+RUN_AS_USER=sonar
+```
+
+# Platform notes - Linux
+```
+If you're running on Linux, you must ensure that:
+
+    vm.max_map_count is greater or equals to 262144
+    fs.file-max is greater or equals to 65536
+    the user running SonarQube can open at least 65536 file descriptors
+    the user running SonarQube can open at least 2048 threads
+
+You can see the values with the following commands:
+
+sysctl vm.max_map_count
+sysctl fs.file-max
+ulimit -n
+ulimit -u
+
+You can set them dynamically for the current session by running the following commands as root:
+
+sysctl -w vm.max_map_count=262144
+sysctl -w fs.file-max=65536
+ulimit -n 65536
+ulimit -u 2048
+
+To set these values more permanently, you must update either /etc/sysctl.d/99-sonarqube.conf (or /etc/sysctl.conf as you wish) to reflect these values.
+
+If the user running SonarQube (sonarqube in this example) does not have the permission to have at least 65536 open descriptors, you must insert this line in /etc/security/limits.d/99-sonarqube.conf (or /etc/security/limits.conf as you wish):
+
+sonarqube   -   nofile   65536
+sonarqube   -   nproc    2048
+
+You can get more detail in the Elasticsearch documentation.
+
+If you are using systemd to start SonarQube, you must specify those limits inside your unit file in the section [service] :
+
+[Service]
+...
+LimitNOFILE=65536
+LimitNPROC=2048
+...
+
+seccomp filter
+
+By default, Elasticsearch uses seccomp filter. On most distribution this feature is activated in the kernel, however on distributions like Red Hat Linux 6 this feature is deactivated. If you are using a distribution without this feature and you cannot upgrade to a newer version with seccomp activated, you have to explicitly deactivate this security layer by updating sonar.search.javaAdditionalOpts in $SONARQUBEHOME/conf/sonar.properties_:
+
+sonar.search.javaAdditionalOpts=-Dbootstrap.system_call_filter=false
+
+You can check if seccomp is available on your kernel with:
+
+$ grep SECCOMP /boot/config-$(uname -r)
+
+If your kernel has seccomp, you will see:
+
+CONFIG_HAVE_ARCH_SECCOMP_FILTER=y
+CONFIG_SECCOMP_FILTER=y
+CONFIG_SECCOMP=y
+```
