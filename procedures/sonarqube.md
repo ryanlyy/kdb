@@ -188,3 +188,26 @@ CONFIG_HAVE_ARCH_SECCOMP_FILTER=y
 CONFIG_SECCOMP_FILTER=y
 CONFIG_SECCOMP=y
 ```
+
+# SonarScanner Installation and Configuration
+export http_proxy=http://135.245.48.34:8000
+export https_proxy=https://135.245.48.34:8000
+wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
+unzip sonar-scanner-cli-3.3.0.1492-linux.zip -d /opt
+vi /opt/sonar-scanner-3.3.0.1492-linux/conf/sonar-scanner.properties
+```
+Uncomment sonar.host.url with correct sonar server url
+#----- Default SonarQube server
+#sonar.host.url=http://localhost:9000
+```
+
+# Q&A 
+* ERROR: Failure during analysis, Node.js command to start eslint-bridge server was not built yet
+```
+Need to install nodejs in SonarQube Server
+```
+* Java heap space error or java.lang.OutOfMemoryError,
+```
+Increase the memory via the SONAR_SCANNER_OPTS environment variable:
+export SONAR_SCANNER_OPTS="-Xmx512m"
+```
