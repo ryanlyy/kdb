@@ -76,3 +76,28 @@ Built-in Object:
 // UninstallOrder is the order in which manifests should be uninstalled (by Kind)
       var UninstallOrder SortOrder = []string{"Service", "Pod", "ReplicationController", "Deployment", "DaemonSet", "ConfigMap", "Secret", "PersistentVolume", "ServiceAccount", "Ingress", "Job", "Namespace"} 
 ```
+# 8 helm Customer Function Defination and Usage
+* Defination
+```
+[root@bcmt-control01 templates]# cat _helper.tpl
+{{- define "my_vnf_name_env" }}
+- name: MY_VNF_NAME
+  value: *vnfname
+{{- end }}
+
+{{- define "test_function" }}
+- name: TEST1
+  value: {{ .var_abc }}
+- name: TEST2
+  value: {{ .var_def }}
+{{- end }}
+```
+* Usage
+```
+     - name: nginx
+        image: nginx:1.7.9
+        vnfname: &vnfname "abcdfg"
+        env:
+          {{- include "test_function" (dict "var_abc" "ABC" "var-def" "DEF") | indent 10}}
+          {{- include "my_vnf_name_env" . | indent 10 }}
+```
