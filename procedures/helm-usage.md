@@ -101,3 +101,13 @@ Built-in Object:
           {{- include "test_function" (dict "var_abc" "ABC" "var-def" "DEF") | indent 10}}
           {{- include "my_vnf_name_env" . | indent 10 }}
 ```
+```
+spec:
+  containers:
+  - env:
+    - name: TEST1
+      value: ABC
+    - name: TEST2
+    - name: MY_VNF_NAME
+      value: abcdfg
+```
