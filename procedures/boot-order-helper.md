@@ -1,5 +1,21 @@
 https://wiki.centos.org/HowTos/Grub2
 
+# Generate boot order configuration file
+[root@foss-ssc-9 boot]# cat  /etc/default/grub
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+GRUB_DEFAULT=saved
+GRUB_SAVEDEFAULT=true
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL_OUTPUT="console"
+GRUB_CMDLINE_LINUX="crashkernel=auto rd.lvm.lv=centos/root rd.lvm.lv=centos/swap rhgb quiet"
+GRUB_DISABLE_RECOVERY="true"
+[root@foss-ssc-9 boot]#
+
+**Compare /etc/grub2.cfg and /boot/grub2/grub.cfg**
+grub2-mkconfig -o /etc/grub2.cfg
+grub2-mkconfig -o /boot/grub2/grub.cfg
+
 # To list all the menu entries that will be displayed at system boot, issue the following command: 
 ```
 [root@foss-ssc-7 ~]# awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2.cfg
