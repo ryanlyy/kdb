@@ -21,8 +21,6 @@ usage()
 typeset -i cnt_start
 typeset -i cnt_end
 typeset -i cnt_diff
-typeset -i cnt_diff_k=0
-typeset -i cnt_diff_m=0
 typeset -i check_interval
 typeset -i check_type_idx
 check_direction="RX"
@@ -76,7 +74,10 @@ do
         sleep $check_interval
         cnt_end=$(query_packet_counter $check_device $check_direction $check_type)
         cnt_diff=$cnt_end-$cnt_start
-        cnt_diff_k=$cnt_diff/1024
-        cnt_diff_m=$cnt_diff_k/1024
+        #cnt_diff_k=$cnt_diff/1024
+        cnt_diff_k=$(echo "scale=2; $cnt_diff/1024" | bc)
+        #cnt_diff_m=$cnt_diff_k/1024.0
+        cnt_diff_m=$(echo "scale=2; $cnt_diff_k/1024" | bc)
+
         echo "$date_str $check_device   $check_direction        $check_type     $cnt_start      $cnt_end       $cnt_diff       $cnt_diff_k     $cnt_diff_m"
 done
