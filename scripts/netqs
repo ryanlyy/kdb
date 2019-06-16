@@ -1,0 +1,51 @@
+#!/usr/bin/bash
+
+#netqs device
+
+echo "#####################################################"
+echo "RedHat 7 Network Performance Tunning"
+echo "#####################################################"
+echo "Checking if CPU IRQ Balance..........."
+cat /proc/interrupts  | grep virtio
+echo "If not balance, check if irqbalance in service or configure it balance"
+systemctl status irqbalance
+
+echo "Checking if 2rd and 3rd column of /proc/net/softnet_stat in creasing..........."
+cat /proc/net/softnet_stat
+
+echo "if 2rd column increasing, try to do: sysctl -w net.core.netdev_max_backlog=X"
+echo "if 3rd column increasing, try to do: sysctl -w net.core.netdev_budget=600"
+
+echo "Checking if tuned configured or not"
+systemctl status tuned
+
+echo "Checking CPU hardware Layout..........."
+numactl -H
+
+echo "Checking CPU power state........"
+cat /sys/module/intel_idle/parameters/max_cstate
+
+echo "Checking Pause Frame ..............."
+ethtool -a $1
+
+echo "Checking Coalesce parameter ..........."
+ethtool -c $1
+
+echo "Checking Adapte Queue ............."
+sysctl net.core.netdev_max_backlog
+sysctl net.core.netdev_budget
+
+echo "Checking  Ring buff ............"
+echo -g $1
+
+echo "Checking txqueuelen"
+ip -s link show $1
+
+echo "Checking adapter offload setting..........."
+ethtool -k $1
+
+echo "Checking protocol buffer ............."
+sysctl -a | grep mem
+
+echo "Checking driver parameter ............."
+modinfo $(ethtool -i $1| grep driver | awk -F ":" '{ print $2 }')
