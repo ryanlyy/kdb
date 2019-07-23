@@ -1,4 +1,4 @@
-Knowledge Database Sharing
+Knowledge Database Sharing - Useful Links
 -----------------------------------
-# https://sonarcloud.io/about
-# https://wiki.centos.org/HowTos
+* https://sonarcloud.io/about
+* https://wiki.centos.org/HowTos
