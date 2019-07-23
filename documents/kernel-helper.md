@@ -1,3 +1,5 @@
+# https://wiki.centos.org/HowTos
+
 # 1. Install needed tools used to build kenel
 ```
 yum install asciidoc audit-libs-devel bash bc binutils binutils-devel bison diffutils elfutils
