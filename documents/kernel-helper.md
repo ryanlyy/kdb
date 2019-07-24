@@ -40,6 +40,41 @@ vi kernel.spec
 ```
 diff -up /tmp/kernel-3.10.0-862.14.4.el7/net/ipv4/arp.c_org /tmp/kernel-3.10.0-862.14.4.el7/net/ipv4/arp.c >/tmp/arp.patch
 ```
+```
+--- net/ipv4/arp.c.orig 2019-07-24 03:42:02.652044882 -0400
++++ net/ipv4/arp.c      2019-07-24 03:37:27.298044882 -0400
+@@ -758,6 +758,11 @@ static bool arp_is_garp(struct net *net,
+  *     Process an arp request.
+  */
+
++static int arp_ryanl_test_only()
++{
++       int a = 100;
++       return 1;
++}
+ static int arp_process(struct sock *sk, struct sk_buff *skb)
+ {
+        struct net_device *dev = skb->dev;
+@@ -774,11 +779,15 @@ static int arp_process(struct sock *sk,
+        struct net *net = dev_net(dev);
+        struct dst_entry *reply_dst = NULL;
+        bool is_garp = false;
++       int ryanl;
+
+        /* arp_rcv below verifies the ARP header and verifies the device
+         * is ARP'able.
+         */
+
++       ryanl = arp_ryanl_test_only();
++       if (ryanl == 10000)
++               goto out;
+        if (in_dev == NULL)
+                goto out;
+
+```
+```
+[ryliu@localhost linux-3.10.0-957.21.3.el7.x86_64]$ patch -p1 -F1 -s net/ipv4/arp.c arp_c.patch
+```
 * Install Patch file
 ```
 cp /tmp/arp.patch /root/rpmbuild/SOURCES/.
