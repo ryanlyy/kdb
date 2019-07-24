@@ -35,23 +35,23 @@ vi kernel.spec
 %define buildid .your_identifier 
 ---
 ```
-## How to create patch
-### Generate patch file
+## Kernel Patching
+* Generate patch file
 ```
 diff -up /tmp/kernel-3.10.0-862.14.4.el7/net/ipv4/arp.c_org /tmp/kernel-3.10.0-862.14.4.el7/net/ipv4/arp.c >/tmp/arp.patch
 ```
-### Install Patch file
+* Install Patch file
 ```
 cp /tmp/arp.patch /root/rpmbuild/SOURCES/.
 ```
-## Apply patch
-### Locate a line "# empty final patch to facilitate testing of kernel patches"
-### Just after that line add your declaration starting with the number 40000
+* Apply patch
+  * Locate a line "# empty final patch to facilitate testing of kernel patches"
+  * Just after that line add your declaration starting with the number 40000
 ```
 Patch40000: my-custom-kernel.patch
 ```
-### Locate a line "ApplyOptionalPatch linux-kernel-test.patch"
-### Just before that line, add a line to apply your patch
+  * Locate a line "ApplyOptionalPatch linux-kernel-test.patch"
+  * Just before that line, add a line to apply your patch
 ```
 ApplyOptionalPatch my-custom-kernel.patch
 ```
