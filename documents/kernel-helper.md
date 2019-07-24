@@ -41,8 +41,8 @@ vi kernel.spec
 diff -up /tmp/kernel-3.10.0-862.14.4.el7/net/ipv4/arp.c_org /tmp/kernel-3.10.0-862.14.4.el7/net/ipv4/arp.c >/tmp/arp.patch
 ```
 ```
---- net/ipv4/arp.c.orig 2019-07-24 03:42:02.652044882 -0400
-+++ net/ipv4/arp.c      2019-07-24 03:37:27.298044882 -0400
+--- a/net/ipv4/arp.c.orig 2019-07-24 03:42:02.652044882 -0400
++++ b/net/ipv4/arp.c      2019-07-24 03:37:27.298044882 -0400
 @@ -758,6 +758,11 @@ static bool arp_is_garp(struct net *net,
   *     Process an arp request.
   */
