@@ -45,15 +45,13 @@ diff -up /tmp/kernel-3.10.0-862.14.4.el7/net/ipv4/arp.c_org /tmp/kernel-3.10.0-8
 cp /tmp/arp.patch /root/rpmbuild/SOURCES/.
 ```
 * Apply patch
-  * Locate a line "# empty final patch to facilitate testing of kernel patches"
-  * Just after that line add your declaration starting with the number 40000
-  * Locate a line "ApplyOptionalPatch linux-kernel-test.patch"
-  * Just before that line, add a line to apply your patch
+  * Locate a line "# empty final patch to facilitate testing of kernel patches", just after that line add your declaration starting with the number 40000
+  * Locate a line "ApplyOptionalPatch linux-kernel-test.patch", just before that line, add a line to apply your patch
 ```
-Patch40000: my-custom-kernel.patch
+Patch40000: arp.patch
 ```
 ```
-ApplyOptionalPatch my-custom-kernel.patch
+ApplyOptionalPatch arp.patch
 ```
 # 4. Build Kernel
 ```
