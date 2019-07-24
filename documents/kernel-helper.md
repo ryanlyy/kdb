@@ -47,10 +47,9 @@ diff -up /tmp/kernel-3.10.0-862.14.4.el7/net/ipv4/arp.c_org /tmp/kernel-3.10.0-8
   *     Process an arp request.
   */
 
-+static int arp_ryanl_test_only()
++bool arp_ryanl_test_only()
 +{
-+       int a = 100;
-+       return 1;
++       return false;
 +}
  static int arp_process(struct sock *sk, struct sk_buff *skb)
  {
@@ -59,14 +58,14 @@ diff -up /tmp/kernel-3.10.0-862.14.4.el7/net/ipv4/arp.c_org /tmp/kernel-3.10.0-8
         struct net *net = dev_net(dev);
         struct dst_entry *reply_dst = NULL;
         bool is_garp = false;
-+       int ryanl;
++       bool ryanl;
 
         /* arp_rcv below verifies the ARP header and verifies the device
          * is ARP'able.
          */
 
 +       ryanl = arp_ryanl_test_only();
-+       if (ryanl == 10000)
++       if (ryanl)
 +               goto out;
         if (in_dev == NULL)
                 goto out;
