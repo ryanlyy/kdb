@@ -15,9 +15,41 @@ echo '%_topdir %(echo $HOME)/rpmbuild' > ~/.rpmmacros
 
 wget http://vault.centos.org/7.6.1810/updates/Source/SPackages/kernel-3.10.0-957.21.3.el7.src.rpm
 rpm -i kernel-3.10.0-957.21.3.el7.src.rpm 2>&1 | grep -v exist
-
-cd ~/rpmbuild/SPECS
-rpmbuild -bp --target=$(uname -m) kernel.spec
 ```
 
-
+# 3. Custom Kerenel
+---
+if not customer Kernel Ignore this section
+---
+* Modify kernel spec file
+```
+cd ~/rpmbuild/SPECS/
+cp kernel.spec kernel.spec.distro
+vi kernel.spec
+---
+# buildid naming update
+%define buildid .your_identifier 
+---
+```
+* Appliy patch
+** Locate a line "# empty final patch to facilitate testing of kernel patches"
+** Just after that line add your declaration starting with the number 40000
+```
+Patch40000: my-custom-kernel.patch
+```
+** Locate a line "ApplyOptionalPatch linux-kernel-test.patch"
+** Just before that line, add a line to apply your patch
+```
+ApplyOptionalPatch my-custom-kernel.patch
+```
+# 4. Build Kernel
+```
+cd ~/rpmbuild/SPECS
+rpmbuild -bb --target=`uname -m` kernel.spec 2> build-err.log | tee build-out.log
+```
+# 5. Install Kernel
+```
+cd  ~/rpmbuild/RPMS/`uname -m`/
+su -l 
+rpm -ivh kernel-*.rpm
+```
