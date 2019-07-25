@@ -25,16 +25,6 @@ if not customer Kernel Ignore this section
 ~/rpmbuild/SOURCES/kernel-$(uname -r|cut -d "-" -f1)-$(uname -m).config
 ```
 
-## Modify kernel spec file
-```
-cd ~/rpmbuild/SPECS/
-cp kernel.spec kernel.spec.distro
-vi kernel.spec
----
-# buildid naming update
-%define buildid .your_identifier 
----
-```
 ## Kernel Patching
 * Generate patch file
 ```
