@@ -224,3 +224,36 @@ volume sync <HOSTNAME> [all|<VOLNAME>] - sync the volume information from a peer
 volume top <VOLNAME> {open|read|write|opendir|readdir|clear} [nfs|brick <brick>] [list-cnt <value>] |
 volume top <VOLNAME> {read-perf|write-perf} [bs <size> count <count>] [brick <brick>] [list-cnt <value>] - volume top operations
 ```
+
+# Q&A
+## XFS (vdc2): xfs_log_force: error -5 returned
+```
+[   77.691772] XFS (dm-1): xfs_do_force_shutdown(0x8) called from line 985 of file fs/xfs/xfs_trans.c.  Return address = 0xffffffffc0d5335f
+[   77.691774] XFS (dm-1): Corruption of in-memory data detected.  Shutting down filesystem
+[   77.691775] XFS (dm-1): Please umount the filesystem and rectify the problem(s)
+[   77.691778] XFS (dm-1): Failed to recover intents
+[   77.691778] XFS (dm-1): log mount finish failed
+[   77.691786] XFS (dm-1): xfs_log_force: error -5 returned.
+```
+```
+#xfs_info /mnt
+kubectl label no cbam-0e940d20ef4d4972abc1f01e472-storage-node-2 nodtype-
+umount /dev/vdc2
+#mkfs.xfs -f /dev/mapper/fedora-root
+#mout /dev/mapper/fedora-root /mnt
+xfs_repair -L /dev/vdc2 
+#xfs_metadump /dev/mapper/fedora-root /tmp/xfs_dump
+mount -a
+kubectl label no cbam-0e940d20ef4d4972abc1f01e472-storage-node-2 nodtype=storage
+```
+```
+gluster volume stop oam
+gluster volume delete oam
+<gluster volume create oam>
+gluster volume set oam cluaster.server-quorum-type server
+gluster volume set oam cluster.quorum-type auto
+gluster volume set oam nfs.disable on
+gluster volume set oam diagnostics.brick-sys-log-level INFO
+gluster volume start oam
+gluster volume status oam
+```
