@@ -1,10 +1,10 @@
 # Go to Gluster Container
 ```
-[root@cbam-03bb6f33a3ee4824833729dce57-infra-node-0 ~]# kubectl get pod |grep gluster
+# kubectl get pod |grep gluster
 glusterfs-kh849                             1/1     Running     0          2d11h
 glusterfs-qhx7v                             1/1     Running     0          2d11h
 glusterfs-vndsb                             1/1     Running     0          2d11h
-[root@cbam-03bb6f33a3ee4824833729dce57-infra-node-0 ~]# kubectl exec -ti glusterfs-kh849 bash
+# kubectl exec -ti glusterfs-kh849 bash
 ```
 # Gluster Cluster
 ## Gluster Cluster Status
@@ -17,7 +17,7 @@ Hostname: infra1
 Uuid: ffa98c9e-2a72-470f-a180-52179d8adbd9
 State: Peer in Cluster (Connected)
 
-Hostname: cbam-03bb6f33a3ee4824833729dce57-infra-node-2.storage-server.nokia.net
+Hostname: 
 Uuid: b7c164d7-0884-40a1-a603-e2ba964b309f
 State: Peer in Cluster (Connected)
 gluster>
@@ -32,7 +32,7 @@ peer probe { <HOSTNAME> | <IP-address> } - probe peer specified by <HOSTNAME>
 gluster> pool list
 UUID                                    Hostname                                                                State
 ffa98c9e-2a72-470f-a180-52179d8adbd9    infra1                                                                  Connected
-b7c164d7-0884-40a1-a603-e2ba964b309f    cbam-03bb6f33a3ee4824833729dce57-infra-node-2.storage-server.nokia.net  Connected
+b7c164d7-0884-40a1-a603-e2ba964b309f    net  Connected
 42ea366c-bbca-4d50-b7f9-745ac5e9b570    localhost                                                               Connected
 ```
 # Gluster Volume
@@ -47,71 +47,6 @@ gluster>
 ## Volume status
 ```
 gluster> volume status
-Status of volume: oam
-Gluster process                             TCP Port  RDMA Port  Online  Pid
-------------------------------------------------------------------------------
-Brick cbam-03bb6f33a3ee4824833729dce57-infr
-a-node-1.storage-server.nokia.net:/mnt/bric
-ks/oam/brick                                49152     0          Y       170
-Brick cbam-03bb6f33a3ee4824833729dce57-infr
-a-node-2.storage-server.nokia.net:/mnt/bric
-ks/oam/brick                                49152     0          Y       96
-Brick cbam-03bb6f33a3ee4824833729dce57-infr
-a-node-0.storage-server.nokia.net:/mnt/bric
-ks/oam/brick                                49152     0          Y       94
-Self-heal Daemon on localhost               N/A       N/A        Y       191
-Self-heal Daemon on cbam-03bb6f33a3ee482483
-3729dce57-infra-node-2.storage-server.nokia
-.net                                        N/A       N/A        Y       193
-Self-heal Daemon on infra1                  N/A       N/A        Y       396
-
-Task Status of Volume oam
-------------------------------------------------------------------------------
-There are no active volume tasks
-
-Status of volume: oam_enc
-Gluster process                             TCP Port  RDMA Port  Online  Pid
-------------------------------------------------------------------------------
-Brick cbam-03bb6f33a3ee4824833729dce57-infr
-a-node-1.storage-server.nokia.net:/mnt/bric
-ks/oam_enc/brick                            49153     0          Y       298
-Brick cbam-03bb6f33a3ee4824833729dce57-infr
-a-node-2.storage-server.nokia.net:/mnt/bric
-ks/oam_enc/brick                            49153     0          Y       132
-Brick cbam-03bb6f33a3ee4824833729dce57-infr
-a-node-0.storage-server.nokia.net:/mnt/bric
-ks/oam_enc/brick                            49153     0          Y       130
-Self-heal Daemon on localhost               N/A       N/A        Y       191
-Self-heal Daemon on infra1                  N/A       N/A        Y       396
-Self-heal Daemon on cbam-03bb6f33a3ee482483
-3729dce57-infra-node-2.storage-server.nokia
-.net                                        N/A       N/A        Y       193
-
-Task Status of Volume oam_enc
-------------------------------------------------------------------------------
-There are no active volume tasks
-
-Status of volume: troubleshooting
-Gluster process                             TCP Port  RDMA Port  Online  Pid
-------------------------------------------------------------------------------
-Brick cbam-03bb6f33a3ee4824833729dce57-infr
-a-node-1.storage-server.nokia.net:/mnt/bric
-ks/troubleshooting/brick                    49154     0          Y       373
-Brick cbam-03bb6f33a3ee4824833729dce57-infr
-a-node-2.storage-server.nokia.net:/mnt/bric
-ks/troubleshooting/brick                    49154     0          Y       170
-Brick cbam-03bb6f33a3ee4824833729dce57-infr
-a-node-0.storage-server.nokia.net:/mnt/bric
-ks/troubleshooting/brick                    49154     0          Y       168
-Self-heal Daemon on localhost               N/A       N/A        Y       191
-Self-heal Daemon on cbam-03bb6f33a3ee482483
-3729dce57-infra-node-2.storage-server.nokia
-.net                                        N/A       N/A        Y       193
-Self-heal Daemon on infra1                  N/A       N/A        Y       396
-
-Task Status of Volume troubleshooting
-------------------------------------------------------------------------------
-There are no active volume tasks
 
 gluster>
 ```
@@ -120,75 +55,6 @@ gluster>
 ```
 gluster> volume info
 
-Volume Name: oam
-Type: Replicate
-Volume ID: 3acd78d7-6dae-4965-a7ea-6aaa071344c5
-Status: Started
-Snapshot Count: 0
-Number of Bricks: 1 x 3 = 3
-Transport-type: tcp
-Bricks:
-Brick1: cbam-03bb6f33a3ee4824833729dce57-infra-node-1.storage-server.nokia.net:/mnt/bricks/oam/brick
-Brick2: cbam-03bb6f33a3ee4824833729dce57-infra-node-2.storage-server.nokia.net:/mnt/bricks/oam/brick
-Brick3: cbam-03bb6f33a3ee4824833729dce57-infra-node-0.storage-server.nokia.net:/mnt/bricks/oam/brick
-Options Reconfigured:
-diagnostics.brick-sys-log-level: INFO
-cluster.server-quorum-type: server
-cluster.quorum-type: auto
-transport.address-family: inet
-nfs.disable: on
-performance.client-io-threads: off
-cluster.server-quorum-ratio: 51%
-
-Volume Name: oam_enc
-Type: Replicate
-Volume ID: f92c81cd-5b0f-4363-8683-479d6c7e063f
-Status: Started
-Snapshot Count: 0
-Number of Bricks: 1 x 3 = 3
-Transport-type: tcp
-Bricks:
-Brick1: cbam-03bb6f33a3ee4824833729dce57-infra-node-1.storage-server.nokia.net:/mnt/bricks/oam_enc/brick
-Brick2: cbam-03bb6f33a3ee4824833729dce57-infra-node-2.storage-server.nokia.net:/mnt/bricks/oam_enc/brick
-Brick3: cbam-03bb6f33a3ee4824833729dce57-infra-node-0.storage-server.nokia.net:/mnt/bricks/oam_enc/brick
-Options Reconfigured:
-diagnostics.brick-sys-log-level: INFO
-encryption.master-key: /etc/glusterfs/ssl/oam_enc.key
-performance.io-cache: off
-performance.read-ahead: off
-performance.readdir-ahead: off
-performance.stat-prefetch: off
-performance.open-behind: off
-performance.write-behind: off
-performance.quick-read: off
-features.encryption: on
-cluster.server-quorum-type: server
-cluster.quorum-type: auto
-transport.address-family: inet
-nfs.disable: on
-performance.client-io-threads: off
-cluster.server-quorum-ratio: 51%
-
-Volume Name: troubleshooting
-Type: Replicate
-Volume ID: f23982fe-c888-4ea6-bd19-45d3c80abbab
-Status: Started
-Snapshot Count: 0
-Number of Bricks: 1 x 3 = 3
-Transport-type: tcp
-Bricks:
-Brick1: cbam-03bb6f33a3ee4824833729dce57-infra-node-1.storage-server.nokia.net:/mnt/bricks/troubleshooting/brick
-Brick2: cbam-03bb6f33a3ee4824833729dce57-infra-node-2.storage-server.nokia.net:/mnt/bricks/troubleshooting/brick
-Brick3: cbam-03bb6f33a3ee4824833729dce57-infra-node-0.storage-server.nokia.net:/mnt/bricks/troubleshooting/brick
-Options Reconfigured:
-diagnostics.brick-sys-log-level: INFO
-cluster.server-quorum-type: server
-cluster.quorum-type: auto
-transport.address-family: inet
-nfs.disable: on
-performance.client-io-threads: off
-cluster.server-quorum-ratio: 51%
-gluster>
 
 ```
 
