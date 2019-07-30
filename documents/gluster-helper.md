@@ -57,6 +57,14 @@ gluster> volume info
 
 
 ```
+## remove and add brick
+```
+3, Remove the bricks for the problem storage node with command "gluster volume remove-brick"
+gluster volume remove-brick oam_enc replica 2 172.24.16.104:/mnt/bricks/oam_enc force
+
+4, add the bricks back after the HW replacement with command "gluster volume add-brick"
+gluster volume add-brick oam_enc replica 3 172.24.16.104:/mnt/bricks/oam_enc force
+```
 
 ## Volume commands
 ```
