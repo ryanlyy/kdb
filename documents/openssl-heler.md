@@ -11,3 +11,5 @@ https://www.joji.me/en-us/blog/walkthrough-decrypt-ssl-tls-traffic-https-and-htt
   //RYAN: AES256-SHA256; using RSA instead of DH in order to decode it in Wirshark
   SSL_CTX_set_cipher_list(ssl_ctx, "AES256-SHA256");
 ```
+https://stackoverflow.com/questions/18449332/limit-openssl-server-cipher-options
+
