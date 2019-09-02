@@ -19,8 +19,13 @@ When binding to file, it create new inode; when binding to directory, it share s
 ```
 [root@foss-ssc-7 ~]# ls -li
 total 36
+mount -o bind aaa aaa-bind
+
    2231513 -rw-r--r-- 1 root root   27 Sep  2 16:19 aaa
    2270252 -rw-r--r-- 0 root root    4 Sep  2 15:53 aaa-bind
+   
+mount -o bind adir adir-bind
+
 1477960715 drwxr-xr-x 2 root root   22 Sep  2 16:21 adir
 1477960715 drwxr-xr-x 2 root root   22 Sep  2 16:21 adir-bind
 
