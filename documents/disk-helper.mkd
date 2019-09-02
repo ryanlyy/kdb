@@ -25,3 +25,4 @@ total 36
 1477960715 drwxr-xr-x 2 root root   22 Sep  2 16:21 adir-bind
 
 ```
+NOTE: docker is using bind mount
