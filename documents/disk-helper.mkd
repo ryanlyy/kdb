@@ -13,3 +13,15 @@ realtime =none                   extsz=4096   blocks=0, rtextents=0
 [root@localhost yum.repos.d]#
 ```
 ftype=1: means d_type enabled
+
+# bind mount file and directory difference
+When binding to file, it create new inode; when binding to directory, it share same inode. so updating directory will be available in binded directory but binded file not.
+```
+[root@foss-ssc-7 ~]# ls -li
+total 36
+   2231513 -rw-r--r-- 1 root root    4 Sep  2 16:19 aaa
+   2270252 -rw-r--r-- 0 root root    4 Sep  2 15:53 aaa-bind
+1477960715 drwxr-xr-x 2 root root   22 Sep  2 16:21 adir
+1477960715 drwxr-xr-x 2 root root   22 Sep  2 16:21 adir-bind
+
+```
