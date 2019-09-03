@@ -39,3 +39,25 @@ PUT 	  /v2/<name>/blobs/uploads/<uuid> 	 Blob     Upload 	Complete the upload sp
 DELETE 	/v2/<name>/blobs/uploads/<uuid> 	Blob      Upload 	Cancel outstanding upload processes, releasing associated resources. If this is not called, the unfinished uploads will eventually timeout.
 GET 	  /v2/_catalog 	                    Catalog 	Retrieve a sorted, json list of repositories available in the registry.
 ```
+
+# HOW to configure log delivery mode
+```
+Configure the delivery mode of log messages from container to log driver
+
+Docker provides two modes for delivering messages from the container to the log driver:
+
+    (default) direct, blocking delivery from container to driver
+    non-blocking delivery that stores log messages in an intermediate per-container ring buffer for consumption by driver
+
+The non-blocking message delivery mode prevents applications from blocking due to logging back pressure. Applications will likely fail in unexpected ways when STDERR or STDOUT streams block.
+
+    WARNING: When the buffer is full and a new message is enqueued, the oldest message in memory is dropped. Dropping messages is often preferred to blocking the log-writing process of an application.
+
+The mode log option controls whether to use the blocking (default) or non-blocking message delivery.
+
+The max-buffer-size log option controls the size of the ring buffer used for intermediate message storage when mode is set to non-blocking. max-buffer-size defaults to 1 megabyte.
+
+The following example starts an Alpine container with log output in non-blocking mode and a 4 megabyte buffer:
+
+$ docker run -it --log-opt mode=non-blocking --log-opt max-buffer-size=4m alpine ping 127.0.0.1
+```
