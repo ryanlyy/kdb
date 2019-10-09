@@ -14,3 +14,10 @@ kubectl get nodes -o json | jq .items[].spec
 }
 
 ```
+
+# How to find rpm package from binary
+```
+[ryliu@GIT-server sde]$ rpm -qf /usr/bin/ping
+iputils-20160308-10.el7.x86_64
+[ryliu@GIT-server sde]$
+```
