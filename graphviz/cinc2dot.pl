@@ -122,6 +122,19 @@ sub tidypath {
 	return $_;
 }
 
+sub recursive_search {
+    my ($inc, $directories_to_search) = @_;
+    my @files;
+    my $file;
+    #warn "recursive_search directories_to_search = $directories_to_search; inc = $inc";
+    find sub { push @files, $File::Find::name if /$inc/ }, $directories_to_search;
+    foreach $file (@files)
+    {
+        return $file if (-e "$file");
+    }
+    return undef
+}
+
 ##########################################################################
 # Searches file include path, and returns exact filename of file
 # Parameters: 
@@ -141,6 +154,7 @@ sub include_search {
 	foreach $item (@includepaths)
 	{
 	  $_ = tidypath($item . "/" . $inc);
+	  //$_ = recursive_search($inc, $item);
 	  warn "include_search trying $_" if $debug;
 	  return $_ if (-e "$_");
 	}
