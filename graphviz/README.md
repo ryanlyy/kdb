@@ -34,11 +34,11 @@ cmake ../ -DLLVM_PATH=/usr/lib64/llvm
 ```
 yum install iwyu
 ```
-```
+
 CMake has grown native support for IWYU as of version 3.3. See their documentation for CMake-side details.
 The CMAKE_CXX_INCLUDE_WHAT_YOU_USE option enables a mode where CMake first compiles a source file, and then runs IWYU on it.
 Use it like this:
-```
+
 ```
 mkdir build && cd build
 CC="clang" CXX="clang++" cmake -DCMAKE_CXX_INCLUDE_WHAT_YOU_USE="/usr/bin/iwyu;-Xiwyu;any;-Xiwyu;iwyu;-Xiwyu;args" 
