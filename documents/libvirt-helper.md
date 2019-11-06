@@ -30,3 +30,24 @@ virsh net-start default
 <to check if network id correct>
 virsh net-edit default 
 ```
+# How to customize openstack Instance XML
+* Customize VM network device multiqueue and ring buffer size
+Add /etc/libvirt/qemeu/instance-00002c3f.xml in <interface> block
+```
+<driver name='vhost' queues='4' rx_queue_size='1024' tx_queue_size='1024'/>
+```
+* Backup above modified xml
+cp /etc/libvirt/qemeu/instance-00002c3f.xml /tmp/.
+* Destroy and Undefine instance
+```
+virsh # destroy instance-00002c3f
+virsh # undefine instance-00002c3f
+```
+* Restore above modified xml
+mv /tmp/instance-00002c3f.xml /etc/libvirt/qemu/.
+
+* Start new instance
+```
+virsh # define instance-00002c3f.xml
+virsh # create instance-00002c3f.xml
+```
