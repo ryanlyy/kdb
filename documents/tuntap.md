@@ -55,5 +55,26 @@ quit
 #define IFF_PERSIST     0x0800
 #define IFF_NOFILTER    0x1000
 ```
+# example:
+```
+[root@foss-ssc-7 scripts]# gdb /home/ryliu/kdb/scripts/mytun -batch-silent --pid=7502 -ex 'set $fd'=3 -x "./tungetiff.gdb"
+devname=tap123
+devflag(short)_lowbyte=2
+devflag(short)_highbyte=11
+```
+the ifr_flag is 1102 based on above defintion, there is no sk_filter configured
+```
+        switch (cmd) {
+        case TUNGETIFF:
+                tun_get_iff(current->nsproxy->net_ns, tun, &ifr);
 
+                if (tfile->detached)
+                        ifr.ifr_flags |= IFF_DETACH_QUEUE;
+                if (!tfile->socket.sk->sk_filter)
+                        ifr.ifr_flags |= IFF_NOFILTER; //we can get ifr_flags to check if there is sk_filter configured
+
+                if (copy_to_user(argp, &ifr, ifreq_len))
+                        ret = -EFAULT;
+                break;
+```
 https://unix.stackexchange.com/questions/462171/how-to-find-the-connection-between-tap-interface-and-its-file-descriptor
