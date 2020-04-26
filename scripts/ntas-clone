@@ -3,13 +3,13 @@
 if [[ $# -eq 1 ]]; then
     NAMESPACE=$1
 else
-    NAMESPACE="tas"
+    NAMESPACE="ntas"
 fi
 
-BASE_PATH="https://gitlabe1.ext.net.nokia.com/"
+BASE_PATH="https://scm.cci.nokia.net/"
 PROJECT_PROJECTION="{ "path": .path, "git": .ssh_url_to_repo }"
 
-GITLAB_PRIVATE_TOKEN="T_kJPzFzFDxJBEBbyN2h"
+GITLAB_PRIVATE_TOKEN="g1cEpFVMRgH6DxrMJpJy"
 FILENAME="/tmp/repos.json"
 NEW_FILENAME="/tmp/new-repos.json"
 
@@ -39,22 +39,22 @@ clone_dev_repo()
 #clone_dev_repo "confd" "git@github.com:kelseyhightower/confd.git"
 
 typeset -A SA_REPOSITORY
-SA_REPOSITORY[1]="tas-infra"
-SA_REPOSITORY[2]="CIScripts"
+#SA_REPOSITORY[1]="tas-infra"
+#SA_REPOSITORY[2]="CIScripts"
 
 cd $CUR_DIR
 
 #First Clone tas superproject
-if [ ! -d "$CUR_DIR/$NAMESPACE" ]; then
-    echo "Cloning $NAMESPACE superproject"
-    git clone git@gitlabe1.ext.net.nokia.com:$NAMESPACE/$NAMESPACE.git $NAMESPACE
-    cd $CUR_DIR/$NAMESPACE
-    git submodule update --init --recursive
-else
-    echo "Pulling $NAMESPACE superproject"
-    cd $CUR_DIR/$NAMESPACE
-    git pull
-fi
+#if [ ! -d "$CUR_DIR/$NAMESPACE" ]; then
+#    echo "Cloning $NAMESPACE superproject"
+#    git clone git@gitlabe1.ext.net.nokia.com:$NAMESPACE/$NAMESPACE.git $NAMESPACE
+#    cd $CUR_DIR/$NAMESPACE
+#    git submodule update --init --recursive
+#else
+#    echo "Pulling $NAMESPACE superproject"
+#    cd $CUR_DIR/$NAMESPACE
+#    git pull
+#fi
 
 #Then Clone Container superproject
 [ -e $FILENAME  ] && rm $FILENAME
@@ -63,7 +63,7 @@ PAGE_COUNTER=1
     echo -n "Browsing ntas repository"
 while true; do
     echo -n " ."
-    CURL_OUT=$(curl -s -XGET "${BASE_PATH}api/v3/groups/$NAMESPACE/projects?private_token=$GITLAB_PRIVATE_TOKEN&per_page=100&page=$PAGE_COUNTER")
+    CURL_OUT=$(curl -s -XGET "${BASE_PATH}api/v4/groups/$NAMESPACE/projects?private_token=$GITLAB_PRIVATE_TOKEN&per_page=10&page=$PAGE_COUNTER")
     if [ "$CURL_OUT" == "[]" ]; then break; fi
     tofile=$(echo $CURL_OUT | jq --raw-output --compact-output ".[] | $PROJECT_PROJECTION" )
     echo $tofile >> $FILENAME
@@ -79,9 +79,9 @@ while read repo; do
         if [ ! -d "$CUR_DIR/$THEPATH" ]; then
             cd $CUR_DIR
             echo "Cloning Container $THEPATH superproject in $PWD ..."
-            git clone -b ntas-19-0 $GIT
-            cd $CUR_DIR/$THEPATH
-            git submodule update --init --recursive
+            git clone $GIT
+            #cd $CUR_DIR/$THEPATH
+            #git submodule update --init --recursive
         else
             echo "Pulling $THEPATH"
             (cd "$CUR_DIR/$THEPATH" && git pull) &
@@ -91,13 +91,13 @@ while read repo; do
             cd $CUR_DIR
             echo "Cloning Container $THEPATH superproject in $PWD ..."
             git clone $GIT
-            cd $CUR_DIR/$THEPATH
-            git submodule update --init --recursive
+            #cd $CUR_DIR/$THEPATH
+            #git submodule update --init --recursive
         else
             echo "Pulling $THEPATH"
             (cd "$CUR_DIR/$THEPATH" && git pull) &
         fi
-     
+
     fi
 done < $NEW_FILENAME
 
