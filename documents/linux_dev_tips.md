@@ -59,6 +59,7 @@ http://man7.org/linux/man-pages/man2/sigaction.2.html
  cat /proc/pid/maps to find starting address
  7f3976d7a000-7f3976d7b000 r--p 00003000 fd:02 9807543                    /usr/lib/python2.7/lib-dynload/zlib.so
  /opt\/LU3P\/lib\/libgrpcwrapper.so.2.0.0: f6604000-f6d7e000
- offset address = f6a008f7 - f6604000
+ offset address = f6a008f7 - f6604000 == 3fc8f7
  check a.objdump for that offset address
+ 00000000003fc860 g    DF .text  000000000000015a  Base        envoy::api::v2::ratelimit::RateLimitDescriptor_Entry::_InternalSerialize(unsigned char*, google::protobuf::io::EpsCopyOutputStream*) const
  
