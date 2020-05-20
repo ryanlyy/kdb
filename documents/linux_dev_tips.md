@@ -62,4 +62,7 @@ http://man7.org/linux/man-pages/man2/sigaction.2.html
  offset address = f6a008f7 - f6604000 == 3fc8f7
  check a.objdump for that offset address
  00000000003fc860 g    DF .text  000000000000015a  Base        envoy::api::v2::ratelimit::RateLimitDescriptor_Entry::_InternalSerialize(unsigned char*, google::protobuf::io::EpsCopyOutputStream*) const
- 
+
+NTAStrace -l addr.json -p /utas/bin/:/opt/LU3P/lib64:/usr/lib64 -e sbl.elf -a f5837429
+
+```
