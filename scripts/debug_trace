@@ -1,0 +1,177 @@
+#!/bin/python
+#
+# Name:
+#    NTAStrace
+#
+# Description:
+#    Translate address to file/line for a given executable and libraries
+#    (if a file with the executable's log of library address ranges
+#    has been provided).
+#
+# Parameters:
+#    - [optional] file containing the shared library address range log
+#        from the execution instance the addresses are from.
+#    - [optional] directory path used to find the executable and libraries.
+#        This will default to $CWD.
+#    - executable name
+#    - list of hex addresses to translate (with or without a 0x prefix)
+#
+
+import argparse
+import os
+import re
+import subprocess
+import json
+
+out_hdr = "Funct Addr   Funct Name                 Line#\tFile\n ==============================================================================="
+
+
+# Name:
+#    find_source
+#
+# Description:
+#    Search for the executable or library in the CWD and
+#    any provided directories.
+#
+
+def find_source(name):
+
+    for top in loc_path.split(":"):
+        chk = top + "/" + name
+        if os.path.isfile(chk):
+            return chk
+
+    return ""
+
+# Name:
+#    find_addr
+#
+# Description:
+#    Find the library or executable an address is in. If in a
+#    a library also return to value to subtract from the address
+#    when tracing.
+#
+
+def find_addr(addr, base_loc, libs):
+
+    if libs == []:
+        return(base_loc, 0)
+
+    if addr < libs[0]["start"] or addr > libs[0]["end"]:
+        return(base_loc, 0)
+
+    idx = 1
+    while idx < len(libs):
+        if addr < libs[idx]["start"]:
+            # Done searching
+            return(base_loc, 0)
+        if addr > libs[idx]["end"]:
+            idx += 1
+            continue
+        if "loc" not in libs[idx]:
+            loc = find_source(libs[idx]["name"])
+            if loc == "":
+                # Not found. E.g. libC.
+                print("FYI, address 0x"+hex(addr).strip('L')+" is in "+libs[idx]["name"]+", but that library was not found in the search path.\n")
+                break
+            libs[idx]["loc"] = loc
+
+        return(libs[idx]["loc"], libs[idx]["start"])
+
+    return(base_loc, 0)
+
+#
+# START OF MAIN:
+#
+
+parser = argparse.ArgumentParser(description='Collect inputs.')
+parser.add_argument('-l', '--lib_log', required=False, metavar='lib_log', help='File with the execution instance shared library address range.')
+parser.add_argument('-p', '--search_path', required=False, metavar='search_path', help='Colon separated list of directories to search for the executable and shared library files.')
+parser.add_argument('-e', '--exec_name', required=True, metavar='exec_name', help='Executable file name.')
+parser.add_argument('-a', '--addrs', required=True, metavar='addrs', nargs='+', help='A hex address value (with or without a 0x prefix).')
+
+args = parser.parse_args()
+
+libinfo = []
+
+if args.lib_log:
+    finfo = open(args.lib_log, "r")
+    fstr = finfo.read()
+    finfo.close()
+
+    try:
+        fdata = json.loads(fstr)
+    except ValueError as e:
+        print("File "+args.lib_log+" is not in JSON format.")
+        exit(-1)
+
+    if "log" not in fdata:
+        print("File "+args.lib_log+" is not in the log format.")
+        exit(-2)
+
+    if "msg" not in fdata["log"]:
+        print("File "+args.lib_log+" log does not have 'msg' attribute.")
+        exit(-3)
+
+    msg = fdata["log"]["msg"]
+
+    # Collect library to address info.
+    # Maintain the list order for easier searching.
+    libinfo.append({"start": 0, "end": 0, "name": "base"})
+
+    range_end = 0
+    for sline in msg.split('\n'):
+        if not re.match("^\/", sline):
+            continue
+        # Get the name (minus path) and range.
+        info = sline[sline.rfind('/')+1:].split()
+
+        if len(info) != 2:
+            # The line may have been truncated.
+            continue
+
+        # Get the name and separate the range.
+        name = re.sub('[:]', '', info[0])
+        range = info[1].split('-')
+
+        if len(range) != 2:
+            # The line may have been truncated.
+            continue
+
+        range_start = int(range[0], 16)
+        range_end = int(range[1], 16)
+        libinfo.append({"start": range_start, "end": range_end, "name": name})
+
+        if libinfo[0]["start"] == 0:
+            libinfo[0]["start"] = range_start
+
+    # Save the last found top address.
+    libinfo[0]["end"] = range_end
+
+loc_path = os.getcwd()
+
+if args.search_path:
+    loc_path = loc_path+":"+args.search_path
+
+procname = args.exec_name
+
+base_loc = find_source(procname)
+
+if base_loc == "":
+    print(procname+" source was not found.")
+    exit(-4)
+
+print(out_hdr)
+
+for addr in args.addrs:
+
+    haddr = int(addr, 16)
+
+    loc, val = find_addr(haddr, base_loc, libinfo)
+
+    cmd_str = "addr2line -p -C -f -i -e "+loc+" "+hex(haddr-val)
+
+    p = subprocess.Popen(cmd_str, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    outlist = p.communicate()[0].split()
+    fl = outlist[2].split(":")
+    print(hex(haddr)+"\t"+outlist[0]+"\t\t\t"+fl[1]+"\t"+fl[0]+"\n")
