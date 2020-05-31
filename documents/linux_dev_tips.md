@@ -50,9 +50,22 @@ http://man7.org/linux/man-pages/man2/sigaction.2.html
               nel; for details, see sigreturn(2).  Further information about
               the ucontext_t structure can be found in getcontext(3).  Com‐
               monly, the handler function doesn't make any use of the third
-              argument.                  
+              argument.   
+              
 ```
 
+```
+
+
+Two Linux-specific methods are SA_SIGINFO and signalfd(), which allows programs to receive very detailed information about signals sent, including the sender's PID.
+
+    Call sigaction() and pass to it a struct sigaction which has the desired signal handler in sa_sigaction and the SA_SIGINFO flag in sa_flags set. With this flag, your signal handler will receive three arguments, one of which is a siginfo_t structure containing the sender's PID and UID.
+
+    Call signalfd() and read signalfd_siginfo structures from it (usually in some kind of a select/poll loop). The contents will be similar to siginfo_t.
+
+Which one to use depends on how your application is written; they probably won't work well outside plain C, and I wouldn't have any hope of getting them work in Java. They are also unportable outside Linux. They also likely are the Very Wrong Way of doing what you are trying to achieve.
+
+```
 # How to us objdump
 ```
  objdump -xDsgeGtT  /opt/LU3P/lib64//libgrpcwrapper.so.2.0.0 > a.objdump
