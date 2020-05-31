@@ -79,3 +79,8 @@ Which one to use depends on how your application is written; they probably won't
 NTAStrace -l addr.json -p /utas/bin/:/opt/LU3P/lib64:/usr/lib64 -e sbl.elf -a f5837429
 
 ```
+
+# How to format Json String
+```
+cat hostconfig.json | python -m json.tool
+```
