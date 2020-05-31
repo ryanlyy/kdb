@@ -21,3 +21,18 @@ kubectl config set-context --current --namespace=<insert-namespace-name-here>
 # Validate it
 kubectl config view | grep namespace:
 ```
+
+# Spec ENV
+```
+    - name: NODE_HOSTNAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: spec.nodeName
+    - name: POD_IP
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: status.podIP
+
+```
