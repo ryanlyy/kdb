@@ -8,6 +8,17 @@ provide API for any interface
 # Security
 # Goverance
 # Storage
+* CheckList
+
 # Data
 # DevOps
 
+# Cloud Architecture
+* Storage Level
+1. Phyiscal
+Object, File and Block
+2 Logical
+* Data Level
+* Network Level
+* Appliation Level
+* Process Level
