@@ -84,3 +84,8 @@ NTAStrace -l addr.json -p /utas/bin/:/opt/LU3P/lib64:/usr/lib64 -e sbl.elf -a f5
 ```
 cat hostconfig.json | python -m json.tool
 ```
+
+# How to get linux system startup time:
+```
+date -d "$(awk -F. '{print $1}' /proc/uptime) second ago" +"%Y-%m-%d %H:%M:%S"
+```
