@@ -1,7 +1,7 @@
 CUR_DIR=$PWD
 PROJECT_PROJECTION='{ path: .path, git: .ssh_url_to_repo }'
-FILENAME=/tmp/repos.json
-NEW_FILENAME=/tmp/repos_new.json
+FILENAME=~/repos.json
+NEW_FILENAME=~/repos_new.json
 rm -rf $FILENAME
 typeset -i PAGE_COUNTER=1
 echo "Cloning all projects under NTAS group..."
@@ -22,10 +22,10 @@ while read repo; do
         if [ ! -d "$CUR_DIR/$THEPATH" ]; then
             cd $CUR_DIR
             echo "Cloning Container $THEPATH in $PWD $GIT ..."
-            git clone $GIT
+            git clone $GIT 
         else
             echo "Pulling $THEPATH"
-            #(cd "$CUR_DIR/$THEPATH" && git pull) &
+            (cd "$CUR_DIR/$THEPATH" && git pull) &
         fi
     }
 done < $NEW_FILENAME
@@ -62,7 +62,7 @@ for subgrp in $tofile; do
                 git clone $GIT
             else
                 echo "Pulling $GRPPATH/$THEPATH"
-                #(cd "$CUR_DIR/$GRPPATH/$THEPATH" && git pull) &
+                (cd "$CUR_DIR/$GRPPATH/$THEPATH" && git pull) &
             fi
         done < $NEW_FILENAME
         rm -rf $FILE_NAME, $NEW_FILENAME
