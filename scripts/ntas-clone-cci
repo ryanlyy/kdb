@@ -1,3 +1,7 @@
+##################################################
+#replace XXXXXXXXXX with your private key 
+##################################################
+
 CUR_DIR=$PWD
 PROJECT_PROJECTION='{ path: .path, git: .ssh_url_to_repo }'
 FILENAME=~/repos.json
@@ -7,7 +11,7 @@ typeset -i PAGE_COUNTER=1
 echo "Cloning all projects under NTAS group..."
 while true; do
     echo -n " ."
-    CURL_OUT=$(curl -s -XGET "https://scm.cci.nokia.net/api/v4/groups/ntas/projects?private_token=zN8uprSZqRryG5CyL1EG&per_page=10&page=$PAGE_COUNTER")
+    CURL_OUT=$(curl -s -XGET "https://scm.cci.nokia.net/api/v4/groups/ntas/projects?private_token=XXXXXXXXXXXXXXXXXXXX&per_page=10&page=$PAGE_COUNTER")
     if [ "$CURL_OUT" == "[]" ]; then break; fi
     tofile=$(echo $CURL_OUT | jq --raw-output --compact-output ".[] | $PROJECT_PROJECTION" )
     echo $tofile >> $FILENAME
@@ -46,7 +50,7 @@ for subgrp in $tofile; do
         PAGE_COUNTER=1
         while true; do
             echo -n " ."
-            CURL_OUT=$(curl -s -XGET "https://scm.cci.nokia.net/api/v4/groups/ntas%2f$GRPPATH/projects?private_token=zN8uprSZqRryG5CyL1EG&per_page=10&page=$PAGE_COUNTER")
+            CURL_OUT=$(curl -s -XGET "https://scm.cci.nokia.net/api/v4/groups/ntas%2f$GRPPATH/projects?private_token=XXXXXXXXXXXXXXXXX&per_page=10&page=$PAGE_COUNTER")
             if [ "$CURL_OUT" == "[]" ]; then break; fi
             tofile=$(echo $CURL_OUT | jq --raw-output --compact-output ".[] | $PROJECT_PROJECTION" )
             echo $tofile >> $FILENAME
