@@ -9,3 +9,4 @@ A quick way to see the mode is by running "bcdedit" from Command Prompt to see t
 
     bcdedit /set hypervisorlaunchtype auto
 ```
+https://petri.com/how-to-disable-hyper-v-completely-in-windows-10
