@@ -49,3 +49,6 @@ NETSH INTERFACE PORTPROXY ADD v4tov4 listenport=%HOSTPORT% listenaddress=0.0.0.0
 NETSH AdvFirewall Firewall add rule name="%LXDISTRO% Port Forward" dir=in action=allow protocol=TCP localport=%HOSTPORT% > NUL
 ECHO WSL2 Virtual Machine %IP%:%WSL2PORT%now accepting traffic on %COMPUTERNAME%:%HOSTPORT%
 ```
+
+https://www.williamjbowman.com/blog/2020/04/25/running-a-public-server-from-wsl-2/
+
