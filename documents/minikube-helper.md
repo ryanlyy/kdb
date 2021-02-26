@@ -113,5 +113,41 @@ minier@N-20HEPF0XS98L:~$ minikube start --docker-env "HTTPS_PROXY=http://10.158.
 ✨  Using the docker driver based on existing profile
 👍  Starting control plane node minikube in cluster minikube
 💾  Downloading Kubernetes v1.20.2 preload ...
-    > preloaded-images-k8s-v8-v1....: 307.78 MiB / 491.22 MiB  62.66% 180.77 Ki
+    > preloaded-images-k8s-v8-v1....: 491.22 MiB / 491.22 MiB  100.00% 287.96 K
+🔥  Creating docker container (CPUs=2, Memory=3100MB) ...
+🌐  Found network options:
+    ▪ http_proxy=http://10.158.100.2:8080
+❗  You appear to be using a proxy, but your NO_PROXY environment does not include the minikube IP (192.168.49.2).
+📘  Please see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more details
+    ▪ https_proxy=http://10.158.100.2:8080
+    ▪ no_proxy=localhsot,127.0.0.0/8,192.168.0.0/16,169.254.0.0./16,10.0.0.0/8
+❗  This container is having trouble accessing https://k8s.gcr.io
+💡  To pull new external images, you may need to configure a proxy: https://minikube.sigs.k8s.io/docs/reference/networking/proxy/
+🐳  Preparing Kubernetes v1.20.2 on Docker 20.10.2 ...
+    ▪ env HTTPS_PROXY=http://10.158.100.2:8080
+    ▪ env HTTP_PROXY=http://10.158.100.2:8080
+    ▪ env NO_PROXY=localhost,127.0.0.1,10.96.0.0/12,192.168.99.0/24,192.168.39.0/24
+    ▪ env NO_PROXY=localhsot,127.0.0.0/8,192.168.0.0/16,169.254.0.0./16,10.0.0.0/8
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔎  Verifying Kubernetes components...
+🌟  Enabled addons: default-storageclass, storage-provisioner
+💡  kubectl not found. If you need it, try: 'minikube kubectl -- get pods -A'
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+minier@N-20HEPF0XS98L:~$
+```
+
+* deployemnt application
+```
+minier@N-20HEPF0XS98L:~$ minikube kubectl -- create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.4
+deployment.apps/hello-minikube created
+minier@N-20HEPF0XS98L:~$ minikube kubectl -- get pod
+NAME                              READY   STATUS    RESTARTS   AGE
+hello-minikube-6ddfcc9757-wqjnb   1/1     Running   0          8s
+minier@N-20HEPF0XS98L:~$
+minier@N-20HEPF0XS98L:~$ minikube kubectl -- get pod
+NAME                              READY   STATUS    RESTARTS   AGE
+hello-minikube-6ddfcc9757-wqjnb   1/1     Running   0          10s
+minier@N-20HEPF0XS98L:~$
 ```
