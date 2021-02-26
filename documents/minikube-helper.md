@@ -5,6 +5,7 @@ Minikube Installation
 
 # Windows Docker Desktop Environment
 1. Install minikube windows version
+
 https://storage.googleapis.com/minikube/releases/latest/minikube-installer.exe
 
 2. Configure proxy if needed
@@ -66,6 +67,7 @@ apt-get install docker-ce docker-ce-cli containerd.io
 
 ```
 * Configure docker proxy in wsl2 ubuntu
+
 The docker daemon in WSL 2.0 is started from “sudo service docker start” command. That is a call to the /etc/init.d/docker script. A possible workaround is to modify that script adding an external environment variables to declare the proxy settings. That script will call /etc/default/docker, as the /etc/default/docker should include like:
 ```
 export HTTP_PROXY=”http://web-proxy:8080"
