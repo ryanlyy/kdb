@@ -1,5 +1,7 @@
 Minikube Installation
 ---
+- [Windows Docker Desktop Environment](#windows-docker-desktop-environment)
+- [WSL2 Ubuntu Environment](#wsl2-ubuntu-environment)
 
 # Windows Docker Desktop Environment
 1. Install minikube windows version
@@ -34,10 +36,23 @@ https://storage.googleapis.com/kubernetes-release/release/v1.20.2/bin/linux/amd6
 6. minikube install
 
 ```
-minikube start --docker-env "HTTPS_PROXY=http://10.158.100.2:8080" --docker-env "HTTP_PROXY=http://10.158.100.2:8080" --docker-env "NO_PROXY=localhost,127.0.0.1,10.96.0.0/12,192.168.99.0/24,192.168.39.0/24" --base-image="gcr.io/k8s-minikube/kicbase:v0.0.17"
+minikube start --docker-env "HTTPS_PROXY=http://proxyip" --docker-env "HTTP_PROXY=http://proxyip" --docker-env "NO_PROXY=localhost,127.0.0.1,10.96.0.0/12,192.168.99.0/24,192.168.39.0/24" --base-image="gcr.io/k8s-minikube/kicbase:v0.0.17"
 
 if there is still issue, please add “--alsologtostderr --v=8” to minikube then we can see more logs.
 
 ```
 
-# WSL2 Unbuntu Environment
+# WSL2 Ubuntu Environment
+* configure proxy
+```
+export http_proxy=
+export https_proxy=
+export no_proxy=
+```
+*
+```
+apt-get update
+apt-get upgrade -y
+```
+* 
+
