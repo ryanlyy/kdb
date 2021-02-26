@@ -18,6 +18,7 @@ set NO_PROXY=localhost,127.0.0.1,10.96.0.0/12,192.168.99.0/24,192.168.39.0/24
 3. Manaul docker pull kubernetes images if proxy does not work
 
 ```
+gcr.io/k8s-minikube/kicbase               v0.0.17    a9b1f16d8ece   5 weeks ago     985MB
 k8s.gcr.io/kube-proxy                     v1.20.2    43154ddb57a8   6 weeks ago     118MB
 k8s.gcr.io/kube-apiserver                 v1.20.2    a8c2fdb8bf76   6 weeks ago     122MB
 k8s.gcr.io/kube-controller-manager        v1.20.2    a27166429d98   6 weeks ago     116MB
@@ -36,7 +37,7 @@ https://storage.googleapis.com/kubernetes-release/release/v1.20.2/bin/linux/amd6
 6. minikube install
 
 ```
-minikube start --docker-env "HTTPS_PROXY=http://proxyip" --docker-env "HTTP_PROXY=http://proxyip" --docker-env "NO_PROXY=localhost,127.0.0.1,10.96.0.0/12,192.168.99.0/24,192.168.39.0/24" --base-image="gcr.io/k8s-minikube/kicbase:v0.0.17"
+minikube start --docker-env "HTTPS_PROXY=http://10.158.100.2:8080" --docker-env "HTTP_PROXY=http://10.158.100.2:8080" --docker-env "NO_PROXY=localhost,127.0.0.1,10.96.0.0/12,192.168.99.0/24,192.168.39.0/24" --base-image="gcr.io/k8s-minikube/kicbase:v0.0.17"
 
 if there is still issue, please add “--alsologtostderr --v=8” to minikube then we can see more logs.
 
@@ -78,3 +79,18 @@ service docker status
 docker pull alpine
 ```
 
+* Install minikube
+```
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+sudo dpkg -i minikube_latest_amd64.deb
+```
+
+* Add non root user and add it to docker group
+```
+adduser minier
+add minier to /etc/group under docker group
+```
+* Install kubernetes using minikube
+```
+minikube start --docker-env "HTTPS_PROXY=http://10.158.100.2:8080" --docker-env "HTTP_PROXY=http://10.158.100.2:8080" --docker-env "NO_PROXY=localhost,127.0.0.1,10.96.0.0/12,192.168.99.0/24,192.168.39.0/24"
+```
