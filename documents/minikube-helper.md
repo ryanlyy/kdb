@@ -86,6 +86,7 @@ sudo dpkg -i minikube_latest_amd64.deb
 ```
 
 * Add non root user and add it to docker group
+
 default driver docker("--dirver=docker") is not allowed using root user
 ```
 adduser minier
