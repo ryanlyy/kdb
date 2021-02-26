@@ -49,10 +49,32 @@ export http_proxy=
 export https_proxy=
 export no_proxy=
 ```
-*
+* Upgrade Ubuntu
 ```
 apt-get update
 apt-get upgrade -y
 ```
-* 
+* Install docker
+
+```
+apt-get install     apt-transport-https    ca-certificates     curl     gnupg-agent     software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+add-apt-repository   "deb [arch=amd64] https://download.docker.com/linux/ubuntu   $(lsb_release -cs)    stable"
+apt-get update
+apt-get install docker-ce docker-ce-cli containerd.io
+
+```
+* Configure docker proxy in wsl2 ubuntu
+The docker daemon in WSL 2.0 is started from “sudo service docker start” command. That is a call to the /etc/init.d/docker script. A possible workaround is to modify that script adding an external environment variables to declare the proxy settings. That script will call /etc/default/docker, as the /etc/default/docker should include like:
+```
+export HTTP_PROXY=”http://web-proxy:8080"
+export HTTPS_PROXY=”http://web-proxy:8080"
+export NO_PROXY=”localhost,127.0.0.0/8,172.16.0.0/12,192.168.0.0/16,10.0.0.0/8”
+```
+* Start Docker
+```
+service docker start
+service docker status
+docker pull alpine
+```
 
