@@ -103,4 +103,12 @@ export no_proxy=....
 * Install kubernetes using minikube
 ```
 minikube start --docker-env "HTTPS_PROXY=http://10.158.100.2:8080" --docker-env "HTTP_PROXY=http://10.158.100.2:8080" --docker-env "NO_PROXY=localhost,127.0.0.1,10.96.0.0/12,192.168.99.0/24,192.168.39.0/24"
+
+
+minier@N-20HEPF0XS98L:~$ minikube start --docker-env "HTTPS_PROXY=http://10.158.100.2:8080" --docker-env "HTTP_PROXY=http://10.158.100.2:8080" --docker-env "NO_PROXY=localhost,127.0.0.1,10.96.0.0/12,192.168.99.0/24,192.168.39.0/24"
+😄  minikube v1.17.1 on Ubuntu 20.04
+✨  Using the docker driver based on existing profile
+👍  Starting control plane node minikube in cluster minikube
+💾  Downloading Kubernetes v1.20.2 preload ...
+    > preloaded-images-k8s-v8-v1....: 307.78 MiB / 491.22 MiB  62.66% 180.77 Ki
 ```
