@@ -86,9 +86,19 @@ sudo dpkg -i minikube_latest_amd64.deb
 ```
 
 * Add non root user and add it to docker group
+default driver docker("--dirver=docker") is not allowed using root user
 ```
 adduser minier
 add minier to /etc/group under docker group
+```
+
+* login as new minier user
+```
+su -l minier
+
+export http_proxy=http://proxyip
+export https_proxy=https://proxyip
+export no_proxy=....
 ```
 * Install kubernetes using minikube
 ```
