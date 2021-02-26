@@ -52,5 +52,8 @@ ECHO WSL2 Virtual Machine %IP%:%WSL2PORT%now accepting traffic on %COMPUTERNAME%
 
 https://www.williamjbowman.com/blog/2020/04/25/running-a-public-server-from-wsl-2/
 http://woshub.com/port-forwarding-in-windows/
+http://woshub.com/manage-windows-firewall-powershell/
+http://woshub.com/ssh-tunnel-port-forward-windows/
+
 
 
