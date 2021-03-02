@@ -1,0 +1,73 @@
+################################################
+# Replace XXXXXXXXXX with your access token to scm.cci.nokia.net 
+################################################
+
+CUR_DIR=$PWD
+PROJECT_PROJECTION='{ path: .path, git: .ssh_url_to_repo }'
+FILENAME=~/repos.json
+NEW_FILENAME=~/repos_new.json
+rm -rf $FILENAME
+typeset -i PAGE_COUNTER=1
+echo "Cloning all projects under NTAS group..."
+while true; do
+    echo -n " ."
+    CURL_OUT=$(curl -s -XGET "https://scm.cci.nokia.net/api/v4/groups/ntas/projects?private_token=XXXXXXXXXX&per_page=10&page=$PAGE_COUNTER")
+    if [ "$CURL_OUT" == "[]" ]; then break; fi
+    tofile=$(echo $CURL_OUT | jq --raw-output --compact-output ".[] | $PROJECT_PROJECTION" )
+    echo $tofile >> $FILENAME
+    let PAGE_COUNTER++
+done
+
+sed -e "s/ /\n/g" $FILENAME > $NEW_FILENAME
+while read repo; do
+    THEPATH=$(echo "$repo" | jq -r ".path")
+    GIT=$(echo "$repo" | jq -r ".git")
+    {
+        if [ ! -d "$CUR_DIR/$THEPATH" ]; then
+            cd $CUR_DIR
+            echo "Cloning Container $THEPATH in $PWD $GIT ..."
+            git clone $GIT 
+        else
+            echo "Pulling $THEPATH"
+            (cd "$CUR_DIR/$THEPATH" && git pull) &
+        fi
+    }
+done < $NEW_FILENAME
+
+rm -rf $FILE_NAME, $NEW_FILENAME
+echo "Cloning all projects under NTAS group... DONE "
+
+echo "Query all subgroup under NTAS group..."
+SUBGROUP_PROJECTION='{ path: .path}'
+CURL_OUT=$(curl -s -XGET 'https://scm.cci.nokia.net/api/v4/groups/ntas/subgroups')
+tofile=$(echo $CURL_OUT | jq --raw-output --compact-output ".[] | $SUBGROUP_PROJECTION" )
+for subgrp in $tofile; do
+        GRPPATH=$(echo "$subgrp" | jq -r ".path")
+        mkdir -p $CUR_DIR/$GRPPATH
+        cd $CUR_DIR/$GRPPATH
+        echo "Cloning all projects under NTAS/$GRPPATH group..."
+        rm -rf $FILENAME
+        PAGE_COUNTER=1
+        while true; do
+            echo -n " ."
+            CURL_OUT=$(curl -s -XGET "https://scm.cci.nokia.net/api/v4/groups/ntas%2f$GRPPATH/projects?private_token=XXXXXXXXXX&per_page=10&page=$PAGE_COUNTER")
+            if [ "$CURL_OUT" == "[]" ]; then break; fi
+            tofile=$(echo $CURL_OUT | jq --raw-output --compact-output ".[] | $PROJECT_PROJECTION" )
+            echo $tofile >> $FILENAME
+            let PAGE_COUNTER++
+        done
+        sed -e "s/ /\n/g" $FILENAME > $NEW_FILENAME
+        while read repo; do
+            THEPATH=$(echo "$repo" | jq -r ".path")
+            GIT=$(echo "$repo" | jq -r ".git")
+            if [ ! -d "$CUR_DIR/$GRPPATH/$THEPATH" ]; then
+                cd $CUR_DIR/$GRPPATH
+                echo "Cloning Container $THEPATH in $PWD $GIT ..."
+                git clone $GIT
+            else
+                echo "Pulling $GRPPATH/$THEPATH"
+                (cd "$CUR_DIR/$GRPPATH/$THEPATH" && git pull) &
+            fi
+        done < $NEW_FILENAME
+        rm -rf $FILE_NAME, $NEW_FILENAME
+done

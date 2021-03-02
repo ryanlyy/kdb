@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: troubleshooting-dp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: troubleshooting
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: foss-ssc-8
+      containers:
+      - name: troubleshooting
+        image: ryanlyy/container-troubleshooting:20180111
+        imagePullPolicy: Never
+        command: ["sh", "-c", "/usr/bin/bash"]
+        stdin: true
+        tty: true

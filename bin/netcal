@@ -1,0 +1,90 @@
+#!/usr/bin/bash
+
+#[root@foss-ssc-7 ~]# ip -s link show enp4s0f0 | grep -A1 "RX: bytes"
+#    RX: bytes  packets  errors  dropped overrun mcast
+#    315589890269 1448943484 0       0       0       1599281
+#[root@foss-ssc-7 ~]# ip -s link show enp4s0f0 | grep -A1 "RX: bytes" | grep -v RX
+#    315591325628 1448951887 0       0       0       1599284
+#[root@foss-ssc-7 ~]# ip -s link show enp4s0f0 | grep -A1 "RX: bytes" | grep -v RX | awk '{ print1 }'
+#[root@foss-ssc-7 ~]# ip -s link show enp4s0f0 | grep -A1 "RX: bytes" | grep -v RX | awk '{ print $1 }'
+
+#parse parameters
+usage()
+{
+        echo "netcal"
+        echo "  -d: interval"
+        echo "  -i: device"
+        echo "  -t: [bytes|packets|erros|dropped|overrun|mcast]"
+        echo "  -D: [RX|TX]"
+        exit 0
+}
+
+typeset -i cnt_start
+typeset -i cnt_end
+typeset -i cnt_diff
+#typeset -i cnt_diff_k=0
+#typeset -i cnt_diff_m=0
+typeset -i check_interval
+typeset -i check_type_idx
+check_direction="RX"
+check_type="bytes"
+check_device="eth0"
+
+while getopts d:D:t:i:h OPTION
+do
+        case "$OPTION" in
+        d) check_interval=$OPTARG;;
+        D) check_direction="$OPTARG";;
+        i) check_device="$OPTARG";;
+        t) check_type="$OPTARG";;
+        h) usage;;
+        :) {
+                echo "$OPTARG need args";
+                usage;
+        };;
+        \?) {
+                echo "$OPTARG is invluad option";
+                 usage;
+        };;
+        esac
+done
+
+#query_packet_data check_device check_direction, check_type
+query_packet_counter()
+{
+        check_data_number=$(ip -s link show $1| grep -A1 "$2: bytes" | grep -v $2)
+        #bytes  packets  errors  dropped
+        if [[ "$3" == "bytes" ]]; then
+                packet_counter=$(echo $check_data_number | awk '{ print $1 }')
+        elif [[ "$3" == "packets" ]]; then
+                packet_counter=$(echo $check_data_number | awk '{ print $2 }')
+        elif [[ "$3" == "errors" ]]; then
+                packet_counter=$(echo $check_data_number | awk '{ print $3 }')
+        elif [[ "$3" == "dropped" ]]; then
+                packet_counter=$(echo $check_data_number | awk '{ print $4 }')
+        else
+                echo "Invalid Packet Type"
+                usage
+        fi
+        echo $packet_counter
+}
+
+echo "date      device  direction       type    start   end     diff/bytes      diff/kb diff/mb total_diff/bytes"
+date_str=$(date +%H:%M:%S)
+cnt_start=$(query_packet_counter $check_device $check_direction $check_type)
+typeset -i first_cnt=$cnt_start
+typeset -i total_diff=0
+while [[ 1 ]];
+do
+        sleep $check_interval
+        cnt_end=$(query_packet_counter $check_device $check_direction $check_type)
+        cnt_diff=$cnt_end-$cnt_start
+        total_diff=$cnt_end-$first_cnt
+        #cnt_diff_k=$cnt_diff/1024
+        cnt_diff_k=$(echo "scale=2; $cnt_diff/1024" | bc)
+        #cnt_diff_m=$cnt_diff_k/1024.0
+        cnt_diff_m=$(echo "scale=2; $cnt_diff_k/1024" | bc)
+        echo "$date_str $check_device   $check_direction        $check_type     $cnt_start      $cnt_end        $cnt_diff       $cnt_diff_k     $cnt_diff_m     $total_diff"
+        date_str=$(date +%H:%M:%S)
+        cnt_start=$cnt_end
+done

@@ -1,0 +1,201 @@
+# xfs-info
+```
+[root@localhost yum.repos.d]# xfs_info /home
+meta-data=/dev/mapper/centos-home isize=512    agcount=4, agsize=4914688 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=0 spinodes=0
+data     =                       bsize=4096   blocks=19658752, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
+log      =internal               bsize=4096   blocks=9599, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+[root@localhost yum.repos.d]#
+```
+ftype=1: means d_type enabled
+
+# bind mount file and directory difference
+When binding to file, it create new inode; when binding to directory, it share same inode. so updating directory will be available in binded directory but binded file not.
+```
+[root@foss-ssc-7 ~]# ls -li
+total 36
+mount -o bind aaa aaa-bind
+
+   2231513 -rw-r--r-- 1 root root   27 Sep  2 16:19 aaa
+   2270252 -rw-r--r-- 0 root root    4 Sep  2 15:53 aaa-bind
+   
+mount -o bind adir adir-bind
+
+1477960715 drwxr-xr-x 2 root root   22 Sep  2 16:21 adir
+1477960715 drwxr-xr-x 2 root root   22 Sep  2 16:21 adir-bind
+
+```
+NOTE: docker is using bind mount
+
+---
+https://haydenjames.io/linux-server-performance-disk-io-slowing-application/
+---
+# top
+```
+top - 09:54:38 up 3 days, 20:08,  5 users,  load average: 0.09, 0.33, 0.27
+Tasks: 273 total,   2 running, 232 sleeping,   0 stopped,   0 zombie
+%Cpu0  :  5.9 us, 26.8 sy,  0.0 ni,  0.5 id, 60.5 wa,  0.0 hi,  6.3 si,  0.0 st
+%Cpu1  :  0.0 us, 13.1 sy,  0.0 ni, 86.5 id,  0.0 wa,  0.0 hi,  0.4 si,  0.0 st
+KiB Mem :  2038676 total,    74420 free,   727852 used,  1236404 buff/cache
+KiB Swap:  1942896 total,  1025392 free,   917504 used.  1056400 avail Mem
+```
+# iotop
+```
+#iotop -oPa
+Total DISK READ :     302.14 M/s | Total DISK WRITE :       0.00 B/s
+Actual DISK READ:     302.26 M/s | Actual DISK WRITE:      11.33 K/s
+  PID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND
+30185 be/4 root       1933.75 M      0.00 B  0.00 % 17.90 % dd if=/dev/sda of=/dev/zero bs=1024 count=10000000000
+30189 be/4 root          8.00 K      0.00 B  0.00 %  0.03 % python3 /usr/sbin/iotop -oPa
+30145 be/4 root          0.00 B      0.00 B  0.00 %  0.01 % [kworker/u4:0-events_power_efficient]
+```
+
+# atop
+```
+CPU | sys      36% | user      6%  |              | irq       5% |               | idle    121% |              | wait     32%  |              |              | steal     0%  | guest     0% | curf 2.71GHz |               | curscal   ?% |
+cpu | sys      23% | user      6%  |              | irq       5% |               | idle     33% |              | cpu000 w 32%  |              |              | steal     0%  | guest     0% | curf 2.71GHz |               | curscal   ?% |
+cpu | sys      14% | user      0%  |              | irq       0% |               | idle     84% |              | cpu001 w  2%  |              |              | steal     0%  | guest     0% | curf 2.71GHz |               | curscal   ?% |
+CPL | avg1    1.08 |               | avg5    0.66 |              | avg15   0.40  |              |              | csw    37787  |              | intr   51359 |               |              |              | numcpu     2  |              |
+MEM | tot     1.9G | free  115.0M  | cache 289.7M | dirty   0.0M | buff  816.2M  | slab  132.1M | slrec  60.3M | shmem  85.4M  | shrss  85.2M | shswp  69.2M |               | vmbal   0.0M |              | hptot   0.0M  | hpuse   0.0M |
+SWP | tot     1.9G | free    1.0G  |              |              |               |              |              |               |              |              |               |              | vmcom   5.5G | vmlim   2.8G  |              |
+PAG | scan  796642 | steal 795224  |              | stall      0 |               |              |              |               |              |              |               |              | swin      10 | swout    562  |              |
+DSK |          sda | busy     95%  |              | read   24551 | write    436  |              | KiB/r    127 | KiB/w      5  |              | MBr/s  306.7 | MBw/s    0.2  |              | avq     0.01 | avio 0.32 ms  |              |
+NET | transport    | tcpi      18  | tcpo      16 |              | udpi       0  | udpo       0 | tcpao      0 | tcppo      0  |              | tcprs      0 | tcpie      0  | tcpor      0 | udpnp      0 |               | udpie      0 |
+NET | network      | ipi       18  |              | ipo       15 | ipfrw      0  |              | deliv     18 |               |              |              |               |              | icmpi      0 | icmpo      0  |              |
+NET | enp0s3    0% |               | pcki      18 | pcko      16 |               | sp 1000 Mbps | si    0 Kbps | so    5 Kbps  |              | coll       0 | mlti       0  | erri       0 | erro       0 | drpi       0  | drpo       0 |
+
+  PID         SYSCPU          USRCPU          VGROW           RGROW           RDDSK          WRDSK          RUID              EUID             ST          EXC           THR         S          CPUNR           CPU         CMD         1/2
+30238          4.02s           0.93s         14612K            924K            3.0G             0K          root              root             N-            -             1         R              1           59%         dd
+   44          0.93s           0.00s             0K              0K              0K             0K          root              root             --            -             1         S              1           11%         kswapd0
+   28          0.17s           0.00s             0K              0K              0K             0K          root              root             --            -             1         S              1            2%         kcompactd0
+```
+
+# dd
+```
+dd if=/dev/sda of=/dev/zero bs=1024 count=10000000000
+
+dd if=/dev/zero of=diskbench bs=1M count=1024 conv=fdatasync
+```
+We will also instruct ‘dd’ to sync this to disk and to ensure that writes do not remain in memory (RAM) which would not give accurate results of the write speed if memory buffer is used (we will leave that for a later test).
+
+to remove read cache when testing read performance
+```
+ echo 3 > /proc/sys/vm/drop_caches
+```
+# dstat
+dstat = vmstat, iostat, ifstat
+
+# lsof
+
+# fio
+```
+[root@foss-ssc-7 benchmark]# fio --name TEST --eta-newline=5s --filename=fio-tempfile.dat --rw=write --size=500m --io_size=10g --blocksize=1024k --ioengine=libaio --fsync=10000 --iodepth=32 --direct=1 --numjobs=1 --runtime=60 --group_reporting
+TEST: (g=0): rw=write, bs=(R) 1024KiB-1024KiB, (W) 1024KiB-1024KiB, (T) 1024KiB-1024KiB, ioengine=libaio, iodepth=32
+fio-3.1
+Starting 1 process
+TEST: Laying out IO file (1 file / 500MiB)
+Jobs: 1 (f=1): [W(1)][11.7%][r=0KiB/s,w=138MiB/s][r=0,w=138 IOPS][eta 00m:53s]
+Jobs: 1 (f=1): [W(1)][21.7%][r=0KiB/s,w=153MiB/s][r=0,w=153 IOPS][eta 00m:47s]
+Jobs: 1 (f=1): [W(1)][31.7%][r=0KiB/s,w=130MiB/s][r=0,w=130 IOPS][eta 00m:41s]
+Jobs: 1 (f=1): [W(1)][41.7%][r=0KiB/s,w=152MiB/s][r=0,w=152 IOPS][eta 00m:35s]
+Jobs: 1 (f=1): [W(1)][51.7%][r=0KiB/s,w=121MiB/s][r=0,w=121 IOPS][eta 00m:29s]
+Jobs: 1 (f=1): [W(1)][61.7%][r=0KiB/s,w=149MiB/s][r=0,w=149 IOPS][eta 00m:23s]
+Jobs: 1 (f=1): [W(1)][71.7%][r=0KiB/s,w=148MiB/s][r=0,w=148 IOPS][eta 00m:17s]
+Jobs: 1 (f=1): [W(1)][81.7%][r=0KiB/s,w=113MiB/s][r=0,w=113 IOPS][eta 00m:11s]
+Jobs: 1 (f=1): [W(1)][91.7%][r=0KiB/s,w=147MiB/s][r=0,w=147 IOPS][eta 00m:05s]
+Jobs: 1 (f=1): [W(1)][100.0%][r=0KiB/s,w=139MiB/s][r=0,w=139 IOPS][eta 00m:00s]
+TEST: (groupid=0, jobs=1): err= 0: pid=55972: Sun Feb 16 10:28:00 2020
+  write: IOPS=133, BW=134MiB/s (140MB/s)(8057MiB/60210msec)
+    slat (usec): min=55, max=22266, avg=140.57, stdev=257.16
+    clat (msec): min=21, max=1224, avg=238.23, stdev=109.90
+     lat (msec): min=21, max=1224, avg=238.37, stdev=109.91
+    clat percentiles (msec):
+     |  1.00th=[   91],  5.00th=[  194], 10.00th=[  209], 20.00th=[  209],
+     | 30.00th=[  211], 40.00th=[  211], 50.00th=[  211], 60.00th=[  213],
+     | 70.00th=[  213], 80.00th=[  243], 90.00th=[  284], 95.00th=[  372],
+     | 99.00th=[  927], 99.50th=[ 1053], 99.90th=[ 1150], 99.95th=[ 1150],
+     | 99.99th=[ 1217]
+   bw (  KiB/s): min= 4104, max=198656, per=100.00%, avg=138152.83, stdev=33716.67, samples=119
+   iops        : min=    4, max=  194, avg=134.87, stdev=32.91, samples=119
+  lat (msec)   : 50=0.34%, 100=0.86%, 250=81.98%, 500=14.50%, 750=0.89%
+  lat (msec)   : 1000=0.70%, 2000=0.74%
+  cpu          : usr=0.95%, sys=1.09%, ctx=8136, majf=0, minf=8211
+  IO depths    : 1=0.2%, 2=0.4%, 4=0.8%, 8=1.7%, 16=3.4%, 32=93.5%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=99.8%, 8=0.0%, 16=0.0%, 32=0.2%, 64=0.0%, >=64=0.0%
+     issued rwt: total=0,8057,0, short=0,0,0, dropped=0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=32
+
+Run status group 0 (all jobs):
+  WRITE: bw=134MiB/s (140MB/s), 134MiB/s-134MiB/s (140MB/s-140MB/s), io=8057MiB (8448MB), run=60210-60210msec
+
+Disk stats (read/write):
+    dm-2: ios=227/17645, merge=0/0, ticks=40065/4584074, in_queue=4624139, util=31.38%, aggrios=225/17555, aggrmerge=2/180, aggrticks=39573/4540311, aggrin_queue=4570172, aggrutil=31.27%
+  sda: ios=225/17555, merge=2/180, ticks=39573/4540311, in_queue=4570172, util=31.27%
+[root@foss-ssc-7 benchmark]#
+
+```
+```
+[root@foss-ssc-7 benchmark]# fio --name TEST --eta-newline=5s --filename=fio-tempfile.dat --rw=randrw --size=500m --io_size=10g --blocksize=4k --ioengine=libaio --fsync=1 --iodepth=1 --direct=1 --numjobs=1 --runtime=60 --group_reporting
+TEST: (g=0): rw=randrw, bs=(R) 4096B-4096B, (W) 4096B-4096B, (T) 4096B-4096B, ioengine=libaio, iodepth=1
+fio-3.1
+Starting 1 process
+Jobs: 1 (f=1): [m(1)][11.7%][r=108KiB/s,w=52KiB/s][r=27,w=13 IOPS][eta 00m:53s]
+Jobs: 1 (f=1): [m(1)][21.7%][r=44KiB/s,w=84KiB/s][r=11,w=21 IOPS][eta 00m:47s]
+Jobs: 1 (f=1): [m(1)][31.7%][r=52KiB/s,w=60KiB/s][r=13,w=15 IOPS][eta 00m:41s]
+Jobs: 1 (f=1): [m(1)][41.7%][r=120KiB/s,w=76KiB/s][r=30,w=19 IOPS][eta 00m:35s]
+Jobs: 1 (f=1): [m(1)][51.7%][r=92KiB/s,w=72KiB/s][r=23,w=18 IOPS][eta 00m:29s]
+Jobs: 1 (f=1): [m(1)][61.7%][r=48KiB/s,w=68KiB/s][r=12,w=17 IOPS][eta 00m:23s]
+Jobs: 1 (f=1): [m(1)][71.7%][r=96KiB/s,w=72KiB/s][r=24,w=18 IOPS][eta 00m:17s]
+Jobs: 1 (f=1): [m(1)][81.7%][r=64KiB/s,w=84KiB/s][r=16,w=21 IOPS][eta 00m:11s]
+Jobs: 1 (f=1): [m(1)][91.7%][r=72KiB/s,w=68KiB/s][r=18,w=17 IOPS][eta 00m:05s]
+Jobs: 1 (f=1): [m(1)][100.0%][r=64KiB/s,w=76KiB/s][r=16,w=19 IOPS][eta 00m:00s]
+TEST: (groupid=0, jobs=1): err= 0: pid=1671: Sun Feb 16 10:31:26 2020
+   read: IOPS=16, BW=66.7KiB/s (68.3kB/s)(4004KiB/60006msec)
+    slat (usec): min=9, max=419, avg=31.39, stdev=22.14
+    clat (usec): min=104, max=222141, avg=11441.05, stdev=11860.80
+     lat (usec): min=118, max=222166, avg=11472.96, stdev=11861.26
+    clat percentiles (usec):
+     |  1.00th=[   114],  5.00th=[  1549], 10.00th=[  2802], 20.00th=[  5604],
+     | 30.00th=[  7898], 40.00th=[  8979], 50.00th=[ 10159], 60.00th=[ 11731],
+     | 70.00th=[ 13173], 80.00th=[ 14615], 90.00th=[ 18220], 95.00th=[ 24773],
+     | 99.00th=[ 38536], 99.50th=[ 47449], 99.90th=[185598], 99.95th=[221250],
+     | 99.99th=[221250]
+   bw (  KiB/s): min=   16, max=  184, per=100.00%, avg=66.67, stdev=26.45, samples=120
+   iops        : min=    4, max=   46, avg=16.67, stdev= 6.61, samples=120
+  write: IOPS=17, BW=70.6KiB/s (72.3kB/s)(4236KiB/60006msec)
+    slat (usec): min=14, max=121, avg=32.65, stdev=14.72
+    clat (msec): min=2, max=290, avg=16.73, stdev=12.48
+     lat (msec): min=2, max=290, avg=16.76, stdev=12.48
+    clat percentiles (msec):
+     |  1.00th=[    5],  5.00th=[    8], 10.00th=[   10], 20.00th=[   12],
+     | 30.00th=[   13], 40.00th=[   14], 50.00th=[   15], 60.00th=[   16],
+     | 70.00th=[   17], 80.00th=[   20], 90.00th=[   28], 95.00th=[   33],
+     | 99.00th=[   46], 99.50th=[   82], 99.90th=[  130], 99.95th=[  292],
+     | 99.99th=[  292]
+   bw (  KiB/s): min=   16, max=  104, per=100.00%, avg=70.60, stdev=16.58, samples=120
+   iops        : min=    4, max=   26, avg=17.65, stdev= 4.15, samples=120
+  lat (usec)   : 250=1.89%, 750=0.05%
+  lat (msec)   : 2=1.41%, 4=3.98%, 10=23.50%, 20=55.92%, 50=12.67%
+  lat (msec)   : 100=0.34%, 250=0.19%, 500=0.05%
+  cpu          : usr=0.08%, sys=0.39%, ctx=5137, majf=0, minf=9
+  IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwt: total=1001,1059,0, short=0,0,0, dropped=0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=1
+
+Run status group 0 (all jobs):
+   READ: bw=66.7KiB/s (68.3kB/s), 66.7KiB/s-66.7KiB/s (68.3kB/s-68.3kB/s), io=4004KiB (4100kB), run=60006-60006msec
+  WRITE: bw=70.6KiB/s (72.3kB/s), 70.6KiB/s-70.6KiB/s (72.3kB/s-72.3kB/s), io=4236KiB (4338kB), run=60006-60006msec
+
+Disk stats (read/write):
+    dm-2: ios=1012/4484, merge=0/0, ticks=11622/275561, in_queue=287183, util=9.89%, aggrios=1016/4498, aggrmerge=0/156, aggrticks=11686/247280, aggrin_queue=256241, aggrutil=10.21%
+  sda: ios=1016/4498, merge=0/156, ticks=11686/247280, in_queue=256241, util=10.21%
+
+```
