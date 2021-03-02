@@ -1,6 +1,12 @@
 Linux Development Tips 
 ---
 
+- [OS Signal Handler](#os-signal-handler)
+- [How to us objdump](#how-to-us-objdump)
+- [How to format Json String](#how-to-format-json-string)
+- [How to get linux system startup time:](#how-to-get-linux-system-startup-time)
+- [How to change timezone](#how-to-change-timezone)
+
 # OS Signal Handler
 http://man7.org/linux/man-pages/man2/sigaction.2.html
 
@@ -89,3 +95,51 @@ cat hostconfig.json | python -m json.tool
 ```
 date -d "$(awk -F. '{print $1}' /proc/uptime) second ago" +"%Y-%m-%d %H:%M:%S"
 ```
+
+# How to change timezone
+
+* OP1: change this link to any zone
+```
+[root@fp56sepvm70-tas-node-1 zoneinfo]# ls -l /etc/localtime
+lrwxrwxrwx. 1 root root 39 Feb 23 22:58 /etc/localtime -> ../usr/share/zoneinfo/America/Sao_Paulo
+[root@fp56sepvm70-tas-node-1 zoneinfo]#
+```
+
+* OP2: using timedatectl
+
+```
+[root@fp56sepvm70-tas-node-1 zoneinfo]# timedatectl -h
+timedatectl [OPTIONS...] COMMAND ...
+
+Query or change system time and date settings.
+
+  -h --help                Show this help message
+     --version             Show package version
+     --no-pager            Do not pipe output into a pager
+     --no-ask-password     Do not prompt for password
+  -H --host=[USER@]HOST    Operate on remote host
+  -M --machine=CONTAINER   Operate on local container
+     --adjust-system-clock Adjust system clock when changing local RTC mode
+
+Commands:
+  status                   Show current time settings
+  set-time TIME            Set system time
+  set-timezone ZONE        Set system time zone
+  list-timezones           Show known time zones
+  set-local-rtc BOOL       Control whether RTC is in local time
+  set-ntp BOOL             Control whether NTP is enabled
+[root@fp56sepvm70-tas-node-1 zoneinfo]#
+```
+
+* OP3: Environment Variable TZ
+
+```
+[root@fp56sepvm70-tas-node-1 zoneinfo]# export TZ=UTC
+[root@fp56sepvm70-tas-node-1 zoneinfo]# date
+Tue Mar  2 08:19:59 UTC 2021
+[[root@fp56sepvm70-tas-node-1 zoneinfo]# unset TZ
+[root@fp56sepvm70-tas-node-1 zoneinfo]# date
+Tue Mar  2 05:20:21 -03 2021
+[root@fp56sepvm70-tas-node-1 zoneinfo]#
+```
+NOTE: TZ is high priority than /etc/localtime
