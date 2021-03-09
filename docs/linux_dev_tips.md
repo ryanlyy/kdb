@@ -98,7 +98,21 @@ date -d "$(awk -F. '{print $1}' /proc/uptime) second ago" +"%Y-%m-%d %H:%M:%S"
 
 # How to change timezone
 
+* Inside of localtime()
+```
+- localtime
+  - __tz_convert(t, 1, &_tmbuf);
+    - tzset_internal (tp == &_tmbuf && use_localtime, 1);
+      - tz = getenv ("TZ");
+      - if tz == NULL then tz = TZDEFAULT(localtime);
+      - if tz == "\0" then tz = "Universal(UTC)"
+      - __tzfile_read (tz, 0, NULL);
+    - if __use_tzfile then __tzfile_compute (*timer, use_localtime, &leap_correction, &leap_extra_secs, tp);
+    - else __tz_compute (*timer, tp, use_localtime);
+```
 * OP1: change this link to any zone
+
+/etc/localtime is system wide default timezone
 ```
 [root@fp56sepvm70-tas-node-1 zoneinfo]# ls -l /etc/localtime
 lrwxrwxrwx. 1 root root 39 Feb 23 22:58 /etc/localtime -> ../usr/share/zoneinfo/America/Sao_Paulo
@@ -133,6 +147,8 @@ Commands:
 
 * OP3: Environment Variable TZ
 
+TZ is user level timezone instead of default /etc/localtime
+
 ```
 [root@fp56sepvm70-tas-node-1 zoneinfo]# export TZ=UTC
 [root@fp56sepvm70-tas-node-1 zoneinfo]# date
@@ -143,3 +159,5 @@ Tue Mar  2 05:20:21 -03 2021
 [root@fp56sepvm70-tas-node-1 zoneinfo]#
 ```
 NOTE: TZ is high priority than /etc/localtime
+
+https://www.cyberciti.biz/faq/centos-linux-6-7-changing-timezone-command-line/
