@@ -6,6 +6,7 @@ Linux Development Tips
 - [How to format Json String](#how-to-format-json-string)
 - [How to get linux system startup time:](#how-to-get-linux-system-startup-time)
 - [How to change timezone](#how-to-change-timezone)
+- [How to log all bash cmd to syslog](#how-to-log-all-bash-cmd-to-syslog)
 
 # OS Signal Handler
 http://man7.org/linux/man-pages/man2/sigaction.2.html
@@ -161,3 +162,14 @@ Tue Mar  2 05:20:21 -03 2021
 NOTE: TZ is high priority than /etc/localtime
 
 https://www.cyberciti.biz/faq/centos-linux-6-7-changing-timezone-command-line/
+
+# How to log all bash cmd to syslog
+
+echo "local6.*    /var/log/commands.log" >> /etc/rsyslog.conf
+
+Add the following to /etc/bashrc
+```
+export PROMPT_COMMAND='RETRN_VAL=$?;logger -p local6.debug "$(whoami) [$$]: $(history 1 | sed "s/^[ ]*[0-9]\+[ ]*//" ) [$RETRN_VAL]"'
+```
+
+systemctl restart rsyslog
