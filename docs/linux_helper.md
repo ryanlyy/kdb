@@ -217,5 +217,24 @@ NUMA node1 CPU(s):     20-39,60-79
 Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3 invpcid_single intel_ppin ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm mpx rdt_a avx512f avx512dq rdseed adx smap clflushopt clwb intel_pt avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_pkg_req pku ospke avx512_vnni md_clear flush_l1d arch_capabilities
 [root@fi-706-cluster1-workerbm-6 docker-74e38c408e06b0b8714e64e4d9ebedbaa07af44835477338943b9e3c6f6d4bf8.scope]#
 ```
+
+to check kubelet CPU managmer policy
+```
+/etc/kubernetes/kubelet-config.yml
+evictionHard:
+  memory.available: 11593Mi
+  nodefs.available: 10%
+  nodefs.inodesFree: 5%
+  imagefs.available: 15%
+systemReserved:
+  memory: 11593Mi
+cpuManagerPolicy: static
+reservedSystemCPUs: "0,40,20,60"
+
+static 策略
+static 策略针对具有整数型 CPU requests 的 Guaranteed Pod ，它允许该类 Pod 中的容器访问节点上的独占 CPU 资源。这种独占性是使用 cpuset cgroup 控制器 来实现的。
+```
 https://codywu2010.wordpress.com/2015/09/27/cpuset-by-example/
 https://www.redhat.com/en/blog/world-domination-cgroups-part-6-cpuset
+
+
