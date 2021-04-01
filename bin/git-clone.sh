@@ -1,13 +1,13 @@
 #!/usr/bin/bash
 
 #Usage:
-#$0 <GIT Access Token> <GIT URL>
+#$0 <GROUP> <GIT Access Token> <GIT URL>
 
 ROOT_DIR=$PWD
 
-#GIT CLONE ACCESS TOKEN
+#GIT SETTING "ACCESS TOKEN"
 GIT_CLONE_TOKEN=$2
-#GIT URL
+#GIT URL FORMAT LIKE: https://x.x.x.x/api/v4/groups
 GIT_URL=$3
 #PROJECT URL FORMAT
 PROJECT_PROJECTION='{ path: .path, path_with_namespace: .path_with_namespace, ssh_url_to_repo: .ssh_url_to_repo }'
