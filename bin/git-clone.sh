@@ -5,6 +5,8 @@
 
 ROOT_DIR=$PWD
 
+#GIT GROUP
+GROUP_NAME=$1
 #GIT SETTING "ACCESS TOKEN"
 GIT_CLONE_TOKEN=$2
 #GIT URL FORMAT LIKE: https://x.x.x.x/api/v4/groups
@@ -110,8 +112,6 @@ git_clone_group() {
     fi
 }
 
-#HERE is ntas
-GROUP_NAME=$1
 git_clone_group "$GROUP_NAME"
 wait
 echo "#######################################################################"
