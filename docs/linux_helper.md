@@ -249,3 +249,35 @@ Dump of assembler code for function A::foo(int):
    0x000000000040133d <+15>:    be 63 25 40 00  mov    $0x402563,%esi
    0x0000000000401342 <+20>:    bf 00 41 60 00  mov    $0x604100,%edi
 ```
+
+# How to jump in code using assemble
+1. Near jmp
+* SHORT jmp: particular offset
+* LONG jmp: larger offset
+Both of these jump types are usually relative
+```
+0x0000000000401534 <+0>:     e9 29 00 00 00  jmpq   0x401562 <foo_stub(int)>
+0x000000000040132e <+0>:     e9 5a fb ff ff  jmpq   0x400e8d <foo_stub_int(void*, int)>
+
+```
+2. Far jmp
+specifies both a segment and offset, which are both absolute in the sense that they specify the required code segment and instruction pointer, rather than an offset relative to the current code segment / instruction pointer.
+
+```
+        if (pstub->far_jmp)
+        {
+            //13 byte
+            *(unsigned char*)fn = 0x49;
+            *((unsigned char*)fn + 1) = 0xbb;
+            *(unsigned long long *)((unsigned char *)fn + 2) = (unsigned long long)fn_stub;
+            *(unsigned char *)((unsigned char *)fn + 10) = 0x41;
+            *(unsigned char *)((unsigned char *)fn + 11) = 0x53;
+            *(unsigned char *)((unsigned char *)fn + 12) = 0xc3;
+        }
+        else
+        {
+            //5 byte
+            *(unsigned char *)fn = (unsigned char)0xE9; // asm jmp
+            *(unsigned int *)((unsigned char *)fn + 1) = (unsigned char *)fn_stub - (unsigned char *)fn - CODESIZE_MIN;
+        }
+```
