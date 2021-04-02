@@ -264,6 +264,20 @@ Both of these jump types are usually relative
 specifies both a segment and offset, which are both absolute in the sense that they specify the required code segment and instruction pointer, rather than an offset relative to the current code segment / instruction pointer.
 
 ```
+    #define CODESIZE 13U
+    #define CODESIZE_MIN 5U
+    #define CODESIZE_MAX CODESIZE
+    //13 byte(jmp m16:64)
+    //movabs $0x102030405060708,%r11
+    //jmpq   *%r11
+    #define REPLACE_FAR(t, fn, fn_stub)\
+        *fn = 0x49;\
+        *(fn + 1) = 0xbb;\
+        *(long long *)(fn + 2) = (long long)fn_stub;\
+        *(fn + 10) = 0x41;\
+        *(fn + 11) = 0xff;\
+```
+```
         if (pstub->far_jmp)
         {
             //13 byte
