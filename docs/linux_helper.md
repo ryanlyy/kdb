@@ -237,4 +237,15 @@ static 策略针对具有整数型 CPU requests 的 Guaranteed Pod ，它允许�
 https://codywu2010.wordpress.com/2015/09/27/cpuset-by-example/
 https://www.redhat.com/en/blog/world-domination-cgroups-part-6-cpuset
 
-
+# How to disas class function
+```
+(gdb) disas /r &A::foo(int)
+Dump of assembler code for function A::foo(int):
+   0x000000000040132e <+0>:     55      push   %rbp
+   0x000000000040132f <+1>:     48 89 e5        mov    %rsp,%rbp
+   0x0000000000401332 <+4>:     48 83 ec 10     sub    $0x10,%rsp
+   0x0000000000401336 <+8>:     48 89 7d f8     mov    %rdi,-0x8(%rbp)
+   0x000000000040133a <+12>:    89 75 f4        mov    %esi,-0xc(%rbp)
+   0x000000000040133d <+15>:    be 63 25 40 00  mov    $0x402563,%esi
+   0x0000000000401342 <+20>:    bf 00 41 60 00  mov    $0x604100,%edi
+```
