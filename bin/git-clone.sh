@@ -2,15 +2,24 @@
 
 #Usage:
 #$0 <GROUP> <GIT Access Token> <GIT URL>
+f [[ $# -lt 3 ]]; then
+        echo "Usage: $0 <git project group> <git access token> <GIT URL>"
+        echo "How to get git access token: scm.cci.nokia.net: Setting -> Access Tokens -> Create pesonal access token"
+        echo "Example: git-clone ntas xxxxxxxxxxxxxxxxx https://x.x.x.x/api/v4/groups"
+        exit -1
+fi
 
 ROOT_DIR=$PWD
 
 #GIT GROUP
 GROUP_NAME=$1
+
 #GIT SETTING "ACCESS TOKEN"
 GIT_CLONE_TOKEN=$2
+
 #GIT URL FORMAT LIKE: https://x.x.x.x/api/v4/groups
 GIT_URL=$3
+
 #PROJECT URL FORMAT
 PROJECT_PROJECTION='{ path: .path, path_with_namespace: .path_with_namespace, ssh_url_to_repo: .ssh_url_to_repo }'
 SUBGROUP_PROJECTION='{ path: .path, full_path: .full_path}'
