@@ -7,6 +7,10 @@ Linux Development Tips
 - [How to get linux system startup time:](#how-to-get-linux-system-startup-time)
 - [How to change timezone](#how-to-change-timezone)
 - [How to log all bash cmd to syslog](#how-to-log-all-bash-cmd-to-syslog)
+- [How to check cpuset for cgroup](#how-to-check-cpuset-for-cgroup)
+- [How to disas class function](#how-to-disas-class-function)
+- [How to jump in code using assemble](#how-to-jump-in-code-using-assemble)
+- [RPM dependencies](#rpm-dependencies)
 
 # OS Signal Handler
 http://man7.org/linux/man-pages/man2/sigaction.2.html
@@ -294,4 +298,11 @@ specifies both a segment and offset, which are both absolute in the sense that t
             *(unsigned char *)fn = (unsigned char)0xE9; // asm jmp
             *(unsigned int *)((unsigned char *)fn + 1) = (unsigned char *)fn_stub - (unsigned char *)fn - CODESIZE_MIN;
         }
+```
+
+# RPM dependencies
+
+```
+$ rpm -qp mypackage.rpm --provides
+$ rpm -qp mypackage.rpm --requires
 ```
