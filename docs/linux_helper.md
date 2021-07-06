@@ -306,3 +306,21 @@ specifies both a segment and offset, which are both absolute in the sense that t
 $ rpm -qp mypackage.rpm --provides
 $ rpm -qp mypackage.rpm --requires
 ```
+
+# Replace multiple spaces with single comma
+```
+top -d 0.5 -b -p 939 | tee a.out
+```
+```
+$ echo "PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND" | sed "s/^ *//;s/ *$//;s/[[:space:]]\{1,\}/,/g"
+PID,USER,PR,NI,VIRT,RES,SHR,S,%CPU,%MEM,TIME+,COMMAND
+[envoy@udm-udmtrigger-7d7d55895c-x79vp ~]$ 
+```
+```
+[envoy@udm-udmtrigger-7d7d55895c-x79vp ~]$ cat a.out | grep bin |  a
+939,envoy,20,0,1710408,39712,30288,S,0.0,0.0,26:54.57,bin.catrunnerf
+939,envoy,20,0,1710408,39712,30288,S,0.0,0.0,26:54.57,bin.catrunnerf
+939,envoy,20,0,1710408,39712,30288,S,0.0,0.0,26:54.57,bin.catrunnerf
+939,envoy,20,0,1710408,39712,30288,S,0.0,0.0,26:54.57,bin.catrunnerf
+939,envoy,20,0,1710408,39712,30288,S,0.0,0.0,26:54.57,bin.catrunnerf
+```
