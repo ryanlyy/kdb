@@ -11,6 +11,7 @@ Linux Development Tips
 - [How to disas class function](#how-to-disas-class-function)
 - [How to jump in code using assemble](#how-to-jump-in-code-using-assemble)
 - [RPM dependencies](#rpm-dependencies)
+- [Replace multiple spaces with single comma](Replace-multiple-spaces-with-single-comma)
 
 # OS Signal Handler
 http://man7.org/linux/man-pages/man2/sigaction.2.html
