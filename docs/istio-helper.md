@@ -1,6 +1,11 @@
 Istio Helper 
 ---
 
+# Traffic Control
+# Security
+## Architecture
+![Istio Security Architecture](../pics/istio-security-arch.JPG)
+
 # Troubleshooting
 * Q1:  Error creating: Internal error occurred: failed calling webhook "namespace.sidecar-injector.istio.io": Post "https://istiod.istio-system.svc:443/inject?timeout=10s": unexpected EOF
 
