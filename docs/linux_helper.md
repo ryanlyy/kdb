@@ -326,3 +326,10 @@ PID,USER,PR,NI,VIRT,RES,SHR,S,%CPU,%MEM,TIME+,COMMAND
 939,envoy,20,0,1710408,39712,30288,S,0.0,0.0,26:54.57,bin.catrunnerf
 939,envoy,20,0,1710408,39712,30288,S,0.0,0.0,26:54.57,bin.catrunnerf
 ```
+
+# How to get all netns of Linux
+```
+pid=$(docker inspect -f '{{.State.Pid}}' ${container_id})
+mkdir -p /var/run/netns/
+ln -sfT /proc/$pid/ns/net /var/run/netns/$container_id
+```
