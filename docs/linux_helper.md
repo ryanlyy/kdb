@@ -333,3 +333,15 @@ pid=$(docker inspect -f '{{.State.Pid}}' ${container_id})
 mkdir -p /var/run/netns/
 ln -sfT /proc/$pid/ns/net /var/run/netns/$container_id
 ```
+
+# How to get all ns using ns
+```
+root@panda-01-edge-05 eth4]# lsns -n -l -t net
+4026531992 net     244     1 root /usr/lib/systemd/systemd --switched-root --system --deserialize 21
+4026532379 net       2  8599 root /pause
+4026532482 net      68  8895 2006 sleep 1d
+4026532613 net      92  4451 2000 postgres: adv caf_db ::1(47320) idle        
+4026532675 net      68  9163 2006 sleep 15m
+4026533419 net      82  5052 2006 sleep 1d
+
+```
