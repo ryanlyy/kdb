@@ -61,3 +61,16 @@ The following example starts an Alpine container with log output in non-blocking
 
 $ docker run -it --log-opt mode=non-blocking --log-opt max-buffer-size=4m alpine ping 127.0.0.1
 ```
+
+# How to perserve file permission using COPY
+```
+FROM busybox as base
+
+RUN mkdir /test; touch /test/test.file; mkdir /test/subdir
+RUN ls -lh / | grep test; ls -lh /test ; chmod -R g=u /test; chown -R 7878:7878 /test; ls -lh / | grep test; ls -lh /test
+
+FROM busybox as release
+RUN mkdir /test; chmod -R g=u /test
+COPY --from=base  /test /test
+RUN ls -lh / | grep  test; ls -lh /test
+```
