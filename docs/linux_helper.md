@@ -345,3 +345,10 @@ root@panda-01-edge-05 eth4]# lsns -n -l -t net
 4026533419 net      82  5052 2006 sleep 1d
 
 ```
+
+# How to disable sudo w/ passwd
+```bash
+At the end of the /etc/sudoers file add this line:
+	
+username     ALL=(ALL) NOPASSWD:ALL
+```
