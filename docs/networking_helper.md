@@ -18,6 +18,8 @@ ETHTOOL_OPTS="-G ${DEVICE} rx 4096; -A ${DEVICE} autoneg on"
 # Q2: 127.0.0.1 always plumbed into lo?
 A1: Yes. when kernel detect device with LOOPBACK flag, it will add 127.0.0.1
 
+and ::1 will be added too but it is controlled by net.ipv6.conf.lo.disable_ipv6
+
 ```bash
 root@k8s-controler-1:~# ip netns add myns
 root@k8s-controler-1:~# ip netns exec myns ip addr
