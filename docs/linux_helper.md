@@ -352,3 +352,57 @@ At the end of the /etc/sudoers file add this line:
 	
 username     ALL=(ALL) NOPASSWD:ALL
 ```
+
+# How to automatically load SCTP kernel module
+## When SCTP socket, SCTP kernel module will be automatically loadded but it need NET_ADMIN permission
+
+## Openshift
+https://docs.openshift.com/container-platform/4.8/networking/using-sctp.html
+
+## Redhat
+https://access.redhat.com/solutions/6625041
+
+```
+The overall workflow requires installing kernel-modules-extra, adding the appropriate modules to /etc/modules-load.d/* to load before sysctls are set during boot, then rebooting to ensure the module and sysctls load appropriately. From there, ss and netstat along with some tool such as nc can be used to ensure the sizes are set.
+
+    Install kernel-modules-extra for the currently installed kernel;
+    Raw
+
+    # dnf install kernel-modules-extra-`uname -r`
+
+        The latest kernel and kernel-modules-extra packages will be installed if the uname -r section is left out of the above command.
+
+    Add sctp to /etc/modules-load.d/* to load sctp before systemd-sysctl.service during boot. Loading sctp before systemd-sysctl.service allows the sctp sysctl.conf settings to be effective;
+    Raw
+
+    # cat /etc/modules-load.d/sctp.conf
+    sctp
+
+    sctp is blacklisted by default on installation. Comment out the blacklisting to enable sctp to be loaded.
+    Raw
+
+     r8 # grep sctp /etc/modprobe.d/*
+    /etc/modprobe.d/sctp-blacklist.conf:#blacklist sctp
+    /etc/modprobe.d/sctp_diag-blacklist.conf:#blacklist sctp_diag
+
+    Reboot (or simply manually load the module, modprobe sctp)
+
+    Check some command such as ncat provided from the nmap-ncat package to ensure sctp sockets can be created
+    Raw
+
+     r8 # lsmod | grep sctp  # checking the module is loaded
+    sctp                  409600  4
+    ip6_udp_tunnel         16384  1 sctp
+    udp_tunnel             20480  1 sctp
+    libcrc32c              16384  5 nf_conntrack,nf_nat,nf_tables,xfs,sctp
+
+     r8 # ncat --sctp -k -l 127.0.0.1 8192  # creates an sctp socket on the local host at socket number 8192
+
+    # In another terminal, check ss
+     r8 # ss -pneomSa | grep -A 1 8192
+    LISTEN 0      10         127.0.0.1:8192      0.0.0.0:*    users:(("ncat",pid=1912,fd=3)) ino:34833 sk:1 <->
+         skmem:(r0,rb212992,t0,tb212992,f0,w0,o0,bl0,d0) locals:127.0.0.1
+
+```
+
+
