@@ -13,7 +13,22 @@ Linux Development Tips
 - [RPM dependencies](#rpm-dependencies)
 - [Replace multiple spaces with single comma](#replace-multiple-spaces-with-single-comma)
 
+# How to check initramfs 
+```bash
+[root@bcmt-edge-08 boot]# lsinitrd initramfs-4.18.0-348.7.1.2201051124.el7_9.emrs.ulnx.x86_64.img /etc/sysctl.conf
+# sysctl settings are defined through files in
+# /usr/lib/sysctl.d/, /run/sysctl.d/, and /etc/sysctl.d/.
+#
+# Vendors settings live in /usr/lib/sysctl.d/.
+# To override a whole file, create a new file with the same in
+# /etc/sysctl.d/ and put new settings there. To override
+# only specific settings, add a file with a lexically later
+# name in /etc/sysctl.d/ and put new settings there.
+#
+# For more information, see sysctl.conf(5) and sysctl.d(5).
+[root@bcmt-edge-08 boot]# 
 
+```
 # OS Signal Handler
 http://man7.org/linux/man-pages/man2/sigaction.2.html
 
