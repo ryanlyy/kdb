@@ -1,0 +1,35 @@
+#!/usr/bin/bash
+
+NAMESPACE=$1
+
+shift 1
+
+CMD=${*}
+
+function go2cont
+{
+	POD_NAME=$1
+	typeset -A CONT_LIST=$(kubectl get pod -n $NAMESPACE $POD_NAME -o jsonpath='{ .status.containerStatuses[*].name }')
+	for CONT in ${CONT_LIST[*]}
+	do
+		echo "container ${CONT} ${*}"
+		if [[ $CONT != "" ]]; then
+			kubectl exec -n $NAMESPACE -ti $POD_NAME -c $CONT -- $CMD
+		else
+			break;
+		fi		
+                break
+	done
+}
+
+typeset -A POD_LIST=$(kubectl get pod -n $NAMESPACE | grep -v NAME | awk '{ print $1 }'| tr -s "\n" " ")
+for POD in ${POD_LIST[*]}
+do
+	echo $POD
+	if [[ $POD != ""  ]]; then 
+		go2cont ${POD}
+	else
+		break;
+	fi
+        break
+done
