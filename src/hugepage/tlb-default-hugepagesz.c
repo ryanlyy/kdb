@@ -8,9 +8,10 @@
 #include <string.h>
 
 
-int main()
+int main(int argc, char** argv)
 {
-    const long long memorySize = 90ULL * 1024ULL * 1024ULL;
+    int ms = atoi(argv[1]);
+    const long long memorySize = ms * 1024ULL * 1024ULL;
 
     void* data = mmap(
         /* "If addr is NULL, then the kernel chooses the (page-aligned) address at which to create the mapping" */
