@@ -32,6 +32,7 @@ int main(int argc, char **argv)
     std::cout << "Allocated pointer at: " << data << "\n";
 
     // if /sys/kernel/mm/transparent_hugepage/enabled = "madvise", then with MADV_HUGEPAAGE, hugepage will be used
+    // if /sys/kernel/mm/transparent_hugepage/enabled = "never", then non hugepage will be used even if MADV_HUGEPAGE is flaged
     if ( madvise( data, memorySize, MADV_HUGEPAGE ) != 0 ) {
         std::cerr << "Error on madvise: " << strerror( errno ) << "\n";
         return 2;
